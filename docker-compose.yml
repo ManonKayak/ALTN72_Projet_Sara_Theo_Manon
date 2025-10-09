@@ -1,0 +1,23 @@
+services:
+  mariadb:
+    image: 'mariadb:latest'
+    environment:
+      - 'MARIADB_PASSWORD=secret'
+      - 'MARIADB_ROOT_PASSWORD=verysecret'
+      - 'MARIADB_USER=myuser'
+    volumes:
+      - ${DB_LOCAL_PATH}:/var/lib/mysql
+      - ./Database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - '3306:3306'
+
+  application:
+    image: 'application'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mariadb
+    ports:
+      - '8081:8080'
+    restart: on-failure:10
