@@ -1,12 +1,11 @@
-FROM maven:4.0.0-rc-4 AS build
-COPY src /home/app/src
-COPY pom.xml /home/app
-RUN mvn -f /home/app/pom.xml clean package
+FROM maven:latest AS build
+RUN mkdir /app
+WORKDIR /app
+COPY . /app
+RUN mvn clean package -DskipTests
 
-#
-# Package stage
-#
-FROM bellsoft/liberica-openjre-debian:24-cds
-COPY --from=build /home/app/target/*.jar /usr/local/lib/*.jar
-EXPOSE 8080
-ENTRYPOINT ["java","-jar","/usr/local/lib/*.jar"]
+FROM openjdk:latest
+RUN mkdir /app
+COPY --from=build /app/target/*.jar /app/*.jar
+WORKDIR /app
+CMD "java" "-jar" "*.jar"
