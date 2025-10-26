@@ -1,0 +1,5 @@
+:root { --radius: 14px; }
+body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+.card { border-radius: var(--radius); }
+.btn, .form-control, .form-select { border-radius: 10px; }
+.navbar-brand { letter-spacing: .2px; }

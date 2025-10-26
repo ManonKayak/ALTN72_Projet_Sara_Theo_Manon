@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/_layout}">
+<head><title th:remove="all">Non trouvé</title></head>
+<body>
+<section layout:fragment="content" class="text-center">
+    <h1 class="display-4">404</h1>
+    <p class="text-muted">La ressource demandée est introuvable.</p>
+    <a class="btn btn-primary" th:href="@{/}">Retour à l’accueil</a>
+</section>
+</body>
+</html>

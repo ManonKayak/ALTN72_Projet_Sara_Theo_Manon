@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/_layout}"
+      th:with="pageTitle='Détail visite'">
+<head><title th:remove="all">Détail visite</title></head>
+<body>
+<section layout:fragment="content">
+  <a class="btn btn-link mb-3" th:href="@{/visites}">&larr; Retour</a>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h3 class="card-title">Visite #<span th:text="${v.id}">1</span></h3>
+      <p><strong>Date :</strong> <span th:text="${v.date}">2025</span></p>
+      <p><strong>Format :</strong> <span th:text="${v.format}">1</span></p>
+      <p><strong>Apprenti :</strong> <span th:text="${v.apprentiNom}">Apprenti</span></p>
+      <p><strong>Entreprise :</strong> <span th:text="${v.entrepriseNom}">Entreprise</span></p>
+      <p><strong>Commentaire :</strong></p>
+      <p th:text="${v.commentaire}">—</p>
+
+      <a class="btn btn-outline-primary" th:href="@{'/visites/' + ${v.id} + '/edit'}">Modifier</a>
+      <form th:action="@{'/visites/' + ${v.id} + '/delete'}" method="post" class="d-inline">
+        <button class="btn btn-outline-danger" onclick="return confirm('Supprimer ?')">Supprimer</button>
+      </form>
+    </div>
+  </div>
+</section>
+</body>
+</html>

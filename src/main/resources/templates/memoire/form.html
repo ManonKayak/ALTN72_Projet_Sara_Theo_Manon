@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/_layout}">
+<head><title th:remove="all">Formulaire mémoire</title></head>
+<body>
+<section layout:fragment="content">
+    <a class="btn btn-link mb-3" th:href="@{/memoires}">&larr; Retour</a>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="card-title" th:text="${id} != null ? 'Modifier mémoire' : 'Nouveau mémoire'">Form</h3>
+
+            <!-- EDIT -->
+            <form th:if="${id != null}" th:action="@{'/memoires/' + ${id}}" method="post" th:object="${form}" novalidate>
+                <div th:replace="~{memoire/_formFields :: fields}"></div>
+                <div class="mt-4 d-flex gap-2">
+                    <button class="btn btn-primary" type="submit">Enregistrer</button>
+                    <a class="btn btn-outline-secondary" th:href="@{/memoires}">Annuler</a>
+                </div>
+            </form>
+
+            <!-- CREATE -->
+            <form th:if="${id == null}" th:action="@{'/memoires'}" method="post" th:object="${form}" novalidate>
+                <div th:replace="~{memoire/_formFields :: fields}"></div>
+                <div class="mt-4 d-flex gap-2">
+                    <button class="btn btn-primary" type="submit">Enregistrer</button>
+                    <a class="btn btn-outline-secondary" th:href="@{/memoires}">Annuler</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+</body>
+</html>

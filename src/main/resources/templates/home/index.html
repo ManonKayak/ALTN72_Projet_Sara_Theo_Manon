@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/_layout}"
+      th:with="pageTitle='Accueil'">
+<head>
+    <title th:remove="all">Accueil</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="d-flex align-items-center justify-content-between">
+        <div>
+            <h1 class="display-5 fw-bold">Bienvenue 👋</h1>
+            <p class="text-muted mb-4">Gérez vos <strong>apprentis</strong>, entreprises, tuteurs, missions et visites.</p>
+            <a class="btn btn-primary btn-lg" th:href="@{/apprentis}">Voir les apprentis</a>
+        </div>
+    </div>
+</section>
+</body>
+</html>

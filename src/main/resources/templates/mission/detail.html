@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/_layout}"
+      th:with="pageTitle='Détail mission'">
+<head><title th:remove="all">Détail mission</title></head>
+<body>
+<section layout:fragment="content">
+    <a class="btn btn-link mb-3" th:href="@{/missions}">&larr; Retour</a>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="card-title">
+                <span th:text="${m.motsCles}">Mots clés</span>
+                <small class="text-muted">— <span th:text="${m.metierCible}">Métier</span></small>
+            </h3>
+
+            <div class="mt-3">
+                <h6 class="text-uppercase text-muted">Commentaires</h6>
+                <p class="mb-0" th:text="${m.commentaires}">…</p>
+            </div>
+
+            <div class="mt-4 d-flex gap-2">
+                <a class="btn btn-outline-primary" th:href="@{'/missions/' + ${m.id} + '/edit'}">Modifier</a>
+                <form th:action="@{'/missions/' + ${m.id} + '/delete'}" method="post" class="d-inline">
+                    <button class="btn btn-outline-danger" onclick="return confirm('Supprimer ?')">Supprimer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

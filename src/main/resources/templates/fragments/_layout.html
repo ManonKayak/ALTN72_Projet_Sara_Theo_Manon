@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:replace="~{fragments/_head :: head(${pageTitle})}">
+    <title>App</title>
+</head>
+
+<body class="bg-light">
+<header th:replace="~{fragments/_navbar :: navbar}"></header>
+
+<main class="container py-4">
+    <div layout:fragment="content"><!-- contenu spécifique --></div>
+</main>
+
+<footer th:replace="~{fragments/_footer :: footer}"></footer>
+</body>
+</html>

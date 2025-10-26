@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/_layout}">
+<head><title th:remove="all">Formulaire apprenti</title></head>
+<body>
+<section layout:fragment="content">
+    <a class="btn btn-link mb-3" th:href="@{/apprentis}">&larr; Retour</a>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="card-title" th:text="${id} != null ? 'Modifier apprenti' : 'Nouvel apprenti'">Form</h3>
+            <form th:if="${id != null}" th:action="@{|/apprentis/${id}|}" method="post" th:object="${form}" novalidate>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="prenom">Prénom</label>
+                        <input id="prenom" class="form-control" th:field="*{prenom}" />
+                        <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('prenom')}" th:errors="*{prenom}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="nom">Nom</label>
+                        <input id="nom" class="form-control" th:field="*{nom}" />
+                        <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="mail">Email</label>
+                        <input id="mail" class="form-control" th:field="*{mail}" type="email"/>
+                        <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="telephone">Téléphone</label>
+                        <input id="telephone" class="form-control" th:field="*{telephone}"/>
+                        <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('telephone')}" th:errors="*{telephone}"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="anneeAcademique">Année académique</label>
+                        <input id="anneeAcademique" class="form-control" th:field="*{anneeAcademique}" type="number"/>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="majeure">Majeure</label>
+                        <input id="majeure" class="form-control" th:field="*{majeure}" type="number"/>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="niveau">Niveau</label>
+                        <input id="niveau" class="form-control" th:field="*{niveau}" type="number"/>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-check">
+                            <input class="form-check-input" th:field="*{archive}" type="checkbox" id="archiveCheck"/>
+                            <label class="form-check-label" for="archiveCheck">Archivé</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2">
+                    <button class="btn btn-primary" type="submit">Enregistrer</button>
+                    <a class="btn btn-outline-secondary" th:href="@{/apprentis}">Annuler</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+</body>
+</html>
