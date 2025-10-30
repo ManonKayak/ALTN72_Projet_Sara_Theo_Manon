@@ -1,14 +1,17 @@
 package org.example.altn72_projet_sara_theo_manon.api;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import org.example.altn72_projet_sara_theo_manon.errors.BadRequestException;
+import org.example.altn72_projet_sara_theo_manon.errors.NotFoundException;
 import org.example.altn72_projet_sara_theo_manon.model.Entreprise;
 import org.example.altn72_projet_sara_theo_manon.model.Tuteur;
 import org.example.altn72_projet_sara_theo_manon.model.EntrepriseRepository;
 import org.example.altn72_projet_sara_theo_manon.model.TuteurRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
 import java.util.List;
@@ -17,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/tuteurs")
 public class TuteurApi {
+
     private final TuteurRepository repo;
     private final EntrepriseRepository entrepriseRepo;
 
@@ -25,21 +29,29 @@ public class TuteurApi {
         this.entrepriseRepo = entrepriseRepo;
     }
 
-    public record TuteurInput(String poste, String nom, String prenom, String email,
-                              String telephone, String remarques, Integer entrepriseId) {}
+    public record TuteurInput(
+            @NotBlank String poste,
+            @NotBlank String nom,
+            @NotBlank String prenom,
+            @Email String email,
+            String telephone,
+            String remarques,
+            Integer entrepriseId
+    ) {}
 
     @GetMapping
-    public List<Tuteur> list() { return repo.findAll(); }
+    public List<Tuteur> list() {
+        return repo.findAll();
+    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Tuteur> get(@PathVariable Integer id) {
+    public Tuteur get(@PathVariable Integer id) {
         return repo.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new NotFoundException("Tuteur id=" + id + " introuvable"));
     }
 
     @PostMapping
-    public ResponseEntity<Tuteur> create(@RequestBody TuteurInput in) {
+    public ResponseEntity<Tuteur> create(@RequestBody @Valid TuteurInput in) {
         var t = new Tuteur();
         t.setPoste(in.poste());
         t.setNom(in.nom());
@@ -50,40 +62,40 @@ public class TuteurApi {
 
         if (in.entrepriseId() != null) {
             Entreprise e = entrepriseRepo.findById(in.entrepriseId())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Entreprise introuvable"));
+                    .orElseThrow(() -> new BadRequestException("Entreprise " + in.entrepriseId() + " inexistante"));
             t.setEntreprise(e);
         }
 
         var saved = repo.save(t);
-        return ResponseEntity.created(URI.create("/api/tuteurs/" + saved.getId()))
-                .body(saved);
+        return ResponseEntity.created(URI.create("/api/tuteurs/" + saved.getId())).body(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Tuteur> update(@PathVariable Integer id, @RequestBody TuteurInput in) {
-        return repo.findById(id).map(existing -> {
-            existing.setPoste(in.poste());
-            existing.setNom(in.nom());
-            existing.setPrenom(in.prenom());
-            existing.setEmail(in.email());
-            existing.setTelephone(in.telephone());
-            existing.setRemarques(in.remarques());
+    public Tuteur update(@PathVariable Integer id, @RequestBody @Valid TuteurInput in) {
+        var t = repo.findById(id)
+                .orElseThrow(() -> new NotFoundException("Tuteur id=" + id + " introuvable"));
 
-            if (in.entrepriseId() != null) {
-                Entreprise e = entrepriseRepo.findById(in.entrepriseId())
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Entreprise introuvable"));
-                existing.setEntreprise(e);
-            } else {
-                existing.setEntreprise(null);
-            }
+        t.setPoste(in.poste());
+        t.setNom(in.nom());
+        t.setPrenom(in.prenom());
+        t.setEmail(in.email());
+        t.setTelephone(in.telephone());
+        t.setRemarques(in.remarques());
 
-            return ResponseEntity.ok(repo.save(existing));
-        }).orElse(ResponseEntity.notFound().build());
+        if (in.entrepriseId() != null) {
+            var e = entrepriseRepo.findById(in.entrepriseId())
+                    .orElseThrow(() -> new BadRequestException("Entreprise " + in.entrepriseId() + " inexistante"));
+            t.setEntreprise(e);
+        } else {
+            t.setEntreprise(null);
+        }
+
+        return repo.save(t);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        if (!repo.existsById(id)) return ResponseEntity.notFound().build();
+        if (!repo.existsById(id)) throw new NotFoundException("Tuteur id=" + id + " introuvable");
         repo.deleteById(id);
         return ResponseEntity.noContent().build();
     }

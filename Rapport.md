@@ -28,6 +28,7 @@ Nous avons choisi d'utiliser InteliJ IDEA comme IDE de notre application et Mari
       - docker-compose build --no-cache
       - docker-compose up
     - Enfin, ouvrez votre navigateur et allez à l'adresse suivante : http://localhost:8081
+    - Pour le swagger, ouvrez votre navigateur et allez à l'adresse suivante : http://localhost:8081/swagger
 
 - **Lancement de l'application depuis **:
     -  Allez sur : 
