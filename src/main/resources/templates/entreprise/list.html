@@ -40,7 +40,7 @@
                     <td th:text="${e.id}">1</td>
                     <td>
                         <a th:href="@{'/entreprises/' + ${e.id}}" th:text="${e.raisonSociale}">ACME</a>
-                        <div class="small text-muted" th:text="${#strings.abbreviate(e.infos, 0, 80)}">infos…</div>
+                        <div class="small text-muted" th:text="${e.infos}">infos…</div>
                     </td>
                     <td th:text="${e.adresse}">Adresse</td>
                     <td class="text-end">

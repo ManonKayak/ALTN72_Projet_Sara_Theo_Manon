@@ -38,10 +38,10 @@
         </thead>
         <tbody>
         <tr th:each="v : ${listVisites}">
-          <td th:text="${v.id}">1</td>
+          <td th:href="@{'/visites/' + ${v.id}}" th:text="${v.id}">1</td>
           <td th:text="${v.date}">2025</td>
           <td th:text="${v.format}">1</td>
-          <td th:text="${v.apprenti.nom} ${v.apprenti.prenom}">Apprenti</td>
+          <td th:text="${v.apprenti.nom + ' ' + v.apprenti.prenom}">Apprenti</td>
           <td th:text="${v.entreprise}">Entreprise</td>
           <td class="text-end">
             <a class="btn btn-sm btn-outline-primary"

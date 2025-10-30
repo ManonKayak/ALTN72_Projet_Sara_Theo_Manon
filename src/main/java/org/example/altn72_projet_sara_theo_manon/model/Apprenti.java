@@ -43,17 +43,14 @@ public class Apprenti {
     @Column(name = "archive", nullable = false)
     private Boolean archive = false;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "entreprise_id", nullable = false)
     private Entreprise entreprise;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "mission_id", nullable = false)
     private Mission mission;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "tuteur_id", nullable = false)
     private Tuteur tuteur;

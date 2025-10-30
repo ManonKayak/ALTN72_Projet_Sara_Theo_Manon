@@ -13,7 +13,7 @@
       <h3 class="card-title">Visite #<span th:text="${visite.id}">1</span></h3>
       <p><strong>Date :</strong> <span th:text="${visite.date}">2025</span></p>
       <p><strong>Format :</strong> <span th:text="${visite.format}">1</span></p>
-      <p><strong>Apprenti :</strong> <span th:text="${visite.apprenti.nom} ${visite.apprenti.prenom}">Apprenti</span></p>
+      <p><strong>Apprenti :</strong> <span th:text="${visite.apprenti.nom + ' ' + visite.apprenti.prenom}">Apprenti</span></p>
       <p><strong>Entreprise :</strong> <span th:text="${visite.entreprise.raisonSociale}">Entreprise</span></p>
       <p><strong>Commentaire :</strong></p>
       <p th:text="${visite.commentaire}">—</p>

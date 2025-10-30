@@ -42,7 +42,7 @@
                 <tr th:each="t : ${listTuteurs}">
                     <td th:text="${t.id}">1</td>
                     <td>
-                        <a th:href="@{'/tuteurs/' + ${t.id}}" th:text="${t.nom} ${t.prenom}">Nom Prenom</a>
+                        <a th:href="@{'/tuteurs/' + ${t.id}}" th:text="${t.nom + ' ' + t.prenom}">Nom Prenom</a>
                     </td>
                     <td th:text="${t.poste}">Poste</td>
                     <td th:text="${t.email}">Email</td>

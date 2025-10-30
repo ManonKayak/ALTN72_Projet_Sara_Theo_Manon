@@ -13,7 +13,24 @@
 
       <form th:action="${formAction}"
             method="post" th:object="${entreprise}" novalidate>
-        <div th:replace="~{entreprise/_formFields :: fields}"></div>
+          <div class="row g-3">
+              <div class="col-md-6">
+                  <label class="form-label" for="raison-sociale">Raison sociale</label>
+                  <input id="raison-sociale" class="form-control" th:field="*{raisonSociale}" />
+                  <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('raison-sociale')}" th:errors="*{raisonSociale}"></div>
+              </div>
+              <div class="col-md-6">
+                  <label class="form-label" for="adresse">Adresse</label>
+                  <input id="adresse" class="form-control" th:field="*{adresse}" />
+                  <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('adresse')}" th:errors="*{adresse}"></div>
+              </div>
+              <div class="col-md-6">
+                  <label class="form-label" for="infos">Adresse</label>
+                  <input id="infos" class="form-control" th:field="*{infos}" />
+                  <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('infos')}" th:errors="*{infos}"></div>
+              </div>
+          </div>
+
         <div class="mt-4 d-flex gap-2">
           <button class="btn btn-primary" type="submit">Enregistrer</button>
           <a class="btn btn-outline-secondary" th:href="@{/entreprises}">Annuler</a>

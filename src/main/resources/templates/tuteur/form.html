@@ -11,8 +11,40 @@
         <div class="card-body">
             <h3 class="card-title" th:text="${id} != null ? 'Modifier tuteur' : 'Nouveau tuteur'">Form</h3>
 
-            <form th:action="@{'/tuteurs/update/' + ${id}}" method="post" th:object="${tuteur}" novalidate>
-                <div th:replace="~{tuteur/_formFields :: fields}"></div>
+            <form th:action="${formAction}" method="post" th:object="${tuteur}" novalidate>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="poste">Poste</label>
+                        <input id="poste" class="form-control" th:field="*{poste}" />
+                        <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('poste')}" th:errors="*{poste}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="poste">Nom</label>
+                        <input id="nom" class="form-control" th:field="*{nom}" />
+                        <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="prenom">Prénom</label>
+                        <input id="prenom" class="form-control" th:field="*{prenom}" />
+                        <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('prenom')}" th:errors="*{prenom}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="email">Email</label>
+                        <input id="email" class="form-control" th:field="*{email}" />
+                        <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="telephone">Téléphone</label>
+                        <input id="telephone" class="form-control" th:field="*{telephone}" />
+                        <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('telephone')}" th:errors="*{telephone}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="remarques">Remarques</label>
+                        <input id="remarques" class="form-control" th:field="*{remarques}" />
+                        <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('remarques')}" th:errors="*{remarques}"></div>
+                    </div>
+                </div>
+
                 <div class="mt-4 d-flex gap-2">
                     <button class="btn btn-primary" type="submit">Enregistrer</button>
                     <a class="btn btn-outline-secondary" th:href="@{/tuteurs}">Annuler</a>

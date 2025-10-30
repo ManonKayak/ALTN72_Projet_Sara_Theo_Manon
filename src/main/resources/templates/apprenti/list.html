@@ -48,7 +48,7 @@
 <!--                    </td>-->
                     <td th:text="${apprenti.nom}">Nom</td>
                     <td th:text="${apprenti.prenom}">Prenom</td>
-                    <td th:text="${apprenti.mail}">mail</td>
+                    <td th:href="@{'/apprentis/' + ${apprenti.id}}" th:text="${apprenti.mail}">mail</td>
 
                     <td th:text="${apprenti.anneeAcademique}">2025</td>
                     <td th:text="${apprenti.niveau}">1</td>

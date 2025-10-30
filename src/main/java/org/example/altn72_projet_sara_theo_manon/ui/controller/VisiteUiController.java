@@ -37,6 +37,8 @@ public class VisiteUiController {
     public String addNewVisite(Model model) {
         model.addAttribute("visite", new Visite());
         model.addAttribute("id", null);
+        model.addAttribute("formAction", "visites/update");
+
         return "visite/form";
     }
 
@@ -57,6 +59,7 @@ public class VisiteUiController {
         Optional<Visite> visite = visiteService.getVisiteById(id);
         model.addAttribute("visite", visite.orElse(null));
         model.addAttribute("id", visite.isPresent() ? id :  null);
+        model.addAttribute("formAction", visite.isPresent() ? "visites/update/" + id :  "visites/update");
 
         return "visite/form";
     }

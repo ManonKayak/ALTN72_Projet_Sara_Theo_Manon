@@ -37,6 +37,7 @@ public class MemoireUiController {
     public String addNewMemoire(Model model) {
         model.addAttribute("memoire", new Memoire());
         model.addAttribute("id", null);
+        model.addAttribute("formAction", "memoires/update");
         return "memoire/form";
     }
 
@@ -57,6 +58,7 @@ public class MemoireUiController {
         Optional<Memoire> memoire = memoireService.getMemoireById(id);
         model.addAttribute("memoire", memoire.orElse(null));
         model.addAttribute("id", memoire.isPresent() ? id :  null);
+        model.addAttribute("formAction", memoire.isPresent() ? "memoires/update/" + id :  "memoires/update");
 
         return "memoire/form";
     }

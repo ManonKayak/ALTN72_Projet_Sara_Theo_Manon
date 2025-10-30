@@ -42,7 +42,7 @@
                     <td>
                         <a th:href="@{'/memoires/' + ${m.id}}" th:text="${m.sujet}">Sujet</a>
                         <div class="small text-muted"
-                             th:text="${#strings.abbreviate(m.commentaire, 0, 80)}">commentaire…</div>
+                             th:text="${m.commentaire}">commentaire…</div>
                     </td>
                     <td th:text="${m.note}">—</td>
                     <td th:text="${m.dateSoutenance}">—</td>

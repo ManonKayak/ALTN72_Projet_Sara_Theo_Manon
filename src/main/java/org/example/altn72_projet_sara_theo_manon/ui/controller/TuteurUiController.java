@@ -39,6 +39,7 @@ public class TuteurUiController {
     public String addNewTuteur(Model model) {
         model.addAttribute("tuteur", new Tuteur());
         model.addAttribute("id", null);
+        model.addAttribute("formAction", "tuteurs/update");
         return "tuteur/form";
     }
 
@@ -59,6 +60,7 @@ public class TuteurUiController {
         Optional<Tuteur> tuteur = tuteurService.getTuteurById(id);
         model.addAttribute("tuteur", tuteur.orElse(null));
         model.addAttribute("id", tuteur.isPresent() ? id :  null);
+        model.addAttribute("formAction", tuteur.isPresent() ? "tuteurs/update/" + id :  "tuteurs/update");
 
         return "tuteur/form";
     }

@@ -11,8 +11,25 @@
     <div class="card-body">
       <h3 class="card-title" th:text="${id} != null ? 'Modifier mission' : 'Nouvelle mission'">Form</h3>
 
-      <form th:action="@{'/missions/update/' + ${id}}" method="post" th:object="${mission}" novalidate>
-        <div th:replace="~{mission/_formFields :: fields}"></div>
+      <form th:action="${formAction}" method="post" th:object="${mission}" novalidate>
+          <div class="row g-3">
+              <div class="col-md-6">
+                  <label class="form-label" for="mots_cles">Mots clés</label>
+                  <input id="mots_cles" class="form-control" th:field="*{motsCles}" />
+                  <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('mots_cles')}" th:errors="*{motsCles}"></div>
+              </div>
+              <div class="col-md-6">
+                  <label class="form-label" for="metier_cible">Métier cible</label>
+                  <input id="metier_cible" class="form-control" th:field="*{metierCible}" />
+                  <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('metier_cible')}" th:errors="*{metierCible}"></div>
+              </div>
+              <div class="col-md-6">
+                  <label class="form-label" for="commentaires">Commentaires</label>
+                  <input id="commentaires" class="form-control" th:field="*{commentaires}" />
+                  <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('commentaires')}" th:errors="*{commentaires}"></div>
+              </div>
+          </div>
+
         <div class="mt-4 d-flex gap-2">
           <button class="btn btn-primary" type="submit">Enregistrer</button>
           <a class="btn btn-outline-secondary" th:href="@{/missions}">Annuler</a>

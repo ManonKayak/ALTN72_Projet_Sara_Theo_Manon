@@ -37,6 +37,7 @@ public class MissionUiController {
     public String addNewMission(Model model) {
         model.addAttribute("mission", new Mission());
         model.addAttribute("id", null);
+        model.addAttribute("formAction", "missions/update");
         return "mission/form";
     }
 
@@ -57,6 +58,7 @@ public class MissionUiController {
         Optional<Mission> mission = missionService.getMissionById(id);
         model.addAttribute("mission", mission.orElse(null));
         model.addAttribute("id", mission.isPresent() ? id :  null);
+        model.addAttribute("formAction", mission.isPresent() ? "missions/update/" + id : "mission/update");
 
         return "mission/form";
     }

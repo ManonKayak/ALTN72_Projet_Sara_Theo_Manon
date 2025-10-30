@@ -43,7 +43,7 @@
                         <a th:href="@{'/missions/' + ${m.id}}" th:text="${m.motsCles}">Mots clés</a>
                     </td>
                     <td th:text="${m.metierCible}">Métier</td>
-                    <td th:text="${#strings.abbreviate(m.commentaires, 0, 60)}">Commentaires</td>
+                    <td th:text="${m.commentaires} ? ${m.commentaires} : ''">Commentaires</td>
                     <td class="text-end">
                         <a class="btn btn-sm btn-outline-primary"
                            th:href="@{'/missions/' + ${m.id} + '/edit'}">Modifier</a>
