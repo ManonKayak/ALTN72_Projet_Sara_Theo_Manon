@@ -23,6 +23,11 @@ public class ApprentiService {
     {
         return this.apprentiRepository.findAll();
     }
+
+    public List<Apprenti> getAllApprentiActifs()
+    {
+        return this.apprentiRepository.findByArchiveFalse();
+    }
     
     public Optional<Apprenti> getApprentiById(final int id)
     {
@@ -44,14 +49,21 @@ public class ApprentiService {
     
     
     @Transactional
-    public Apprenti updateApprenti(final Integer id, final Apprenti apprenti){
-        Apprenti apprentiToUpdate = apprentiRepository.findById(id).orElseThrow(() -> new IllegalStateException("Cet apprenti n'existe pas"));
+    public boolean updateApprenti(final Integer id, final Apprenti apprenti){
+        try {
+            Optional<Apprenti> apprentiToUpdate = apprentiRepository.findById(id);
 
-        if (apprentiToUpdate != null) {
-            BeanUtils.copyProperties(apprenti, apprentiToUpdate, "id");
-            apprentiRepository.save(apprentiToUpdate);
+            if (apprentiToUpdate.isPresent()) {
+                BeanUtils.copyProperties(apprenti, apprentiToUpdate.get(), "id");
+                apprentiRepository.save(apprentiToUpdate.get());
+                return true;
+            }
+            else  {
+                return false;
+            }
+        } catch (Exception ex) {
+            return false;
         }
-        return apprentiToUpdate;
     }
 
     public List<Apprenti> FilterApprentiByNom(final String nom)

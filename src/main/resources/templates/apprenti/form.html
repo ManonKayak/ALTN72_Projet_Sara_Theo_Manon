@@ -43,8 +43,47 @@
                         <label class="form-label" for="niveau">Niveau</label>
                         <input id="niveau" class="form-control" th:field="*{niveau}" type="number"/>
                     </div>
-                </div>
 
+                    <div class="col-md-4">
+                        <label class="form-label" for="entreprise_id">Entreprise</label>
+                        <select id="entreprise_id" class="form-select" th:field="*{entreprise}">
+                            <option value="">-- Sélectionnez une entreprise --</option>
+                            <option th:each="entreprise : ${entreprises}"
+                                    th:value="${entreprise}"
+                                    th:text="${entreprise.raisonSociale}"></option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label" for="tuteur_id">Tuteur</label>
+                        <select id="tuteur_id" class="form-select" th:field="*{tuteur}">
+                            <option value="">-- Sélectionnez un tuteur --</option>
+                            <option th:each="tuteur : ${tuteurs}"
+                                    th:value="${tuteur}"
+                                    th:text="${tuteur.email}"></option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label" for="memoire_id">Mémoire</label>
+                        <select id="memoire_id" class="form-select" th:field="*{memoire}">
+                            <option value="">-- Sélectionnez un mémoire --</option>
+                            <option th:each="memoire : ${memoires}"
+                                    th:value="${memoire}"
+                                    th:text="${memoire.sujet}"></option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label" for="mission_id">Mémoire</label>
+                        <select id="mission_id" class="form-select" th:field="*{mission}">
+                            <option value="">-- Sélectionnez un mémoire --</option>
+                            <option th:each="mission : ${missions}"
+                                    th:value="${mission}"
+                                    th:text="${mission.motsCles}"></option>
+                        </select>
+                    </div>
+                </div>
                 <div class="mt-4 d-flex gap-2">
                     <button class="btn btn-primary" type="submit">Enregistrer</button>
                     <a class="btn btn-outline-secondary" th:href="@{/apprentis}">Annuler</a>

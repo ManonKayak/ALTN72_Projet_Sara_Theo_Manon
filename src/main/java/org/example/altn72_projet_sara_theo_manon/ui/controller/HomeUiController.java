@@ -26,6 +26,6 @@ public class HomeUiController {
     @GetMapping("/logout")
     public String logout(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
         this.logoutHandler.logout(request, response, authentication);
-        return "home/login";
+        return "redirect:home/login";
     }
 }

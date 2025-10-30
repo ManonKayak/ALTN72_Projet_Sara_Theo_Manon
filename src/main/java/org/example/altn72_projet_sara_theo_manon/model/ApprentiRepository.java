@@ -18,6 +18,8 @@ public interface ApprentiRepository extends JpaRepository<Apprenti, Integer> {
 
     List<Apprenti> findByAnneeAcademique(Integer anneeAcademique);
 
+    List<Apprenti> findByArchiveFalse();
+
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Transactional
     @Query("UPDATE Apprenti a SET a.archive = true WHERE a.id = :id")
