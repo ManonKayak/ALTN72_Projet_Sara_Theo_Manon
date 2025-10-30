@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/_layout}"
+      th:with="pageTitle='Connexion - Tuteur'">
+<head>
+    <title th:remove="all">Connexion - Tuteur</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="d-flex align-items-center justify-content-between">
+        <h1 class="display-5 fw-bold">Connexion</h1>
+        <div>
+            <form th:action="@{/login}" method="post" novalidate>
+                <div class="row g-3">
+                    <div class="col-md-12">
+                        <label class="form-label" for="email">Email</label>
+                        <input id="email" class="form-control" type="email" name="username" required />
+                        <div class="invalid-feedback d-block" th:if="${param.error}" th:text="Email ou mot de passe incorrect."></div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label" for="password">Mot de passe</label>
+                        <input id="password" class="form-control" type="password" name="password" required />
+                        <div class="invalid-feedback d-block" th:if="${param.error}" th:text="Email ou mot de passe incorrect."></div>
+                    </div>
+                </div>
+                <div class="mt-4 d-flex gap-2">
+                    <button class="btn btn-primary" type="submit">Se connecter</button>
+                    <a class="btn btn-outline-secondary" th:href="@{/}">Annuler</a>
+                </div>
+            </form>
+
+<!--            ne marchez pas pour l'instant... -->
+            <div th:if="${param.error}" class="alert alert-danger">
+                Email ou mot de passe incorrect.
+            </div>
+            <div th:if="${param.logout}" class="alert alert-success">
+                Vous êtes déconnecté.
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

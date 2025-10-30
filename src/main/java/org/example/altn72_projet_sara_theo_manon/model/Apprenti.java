@@ -1,6 +1,7 @@
 package org.example.altn72_projet_sara_theo_manon.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "apprenti", schema = "projectDB")
@@ -41,6 +42,57 @@ public class Apprenti {
 
     @Column(name = "archive", nullable = false)
     private Boolean archive = false;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "entreprise_id", nullable = false)
+    private Entreprise entreprise;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "mission_id", nullable = false)
+    private Mission mission;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "tuteur_id", nullable = false)
+    private Tuteur tuteur;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "memoire_id")
+    private Memoire memoire;
+
+    public Memoire getMemoire() {
+        return memoire;
+    }
+
+    public void setMemoire(Memoire memoire) {
+        this.memoire = memoire;
+    }
+
+    public Tuteur getTuteur() {
+        return tuteur;
+    }
+
+    public void setTuteur(Tuteur tuteur) {
+        this.tuteur = tuteur;
+    }
+
+    public Mission getMission() {
+        return mission;
+    }
+
+    public void setMission(Mission mission) {
+        this.mission = mission;
+    }
+
+    public Entreprise getEntreprise() {
+        return entreprise;
+    }
+
+    public void setEntreprise(Entreprise entreprise) {
+        this.entreprise = entreprise;
+    }
 
     public Integer getId() {
         return id;

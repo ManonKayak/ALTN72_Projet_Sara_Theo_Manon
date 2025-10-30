@@ -1,93 +1,78 @@
 package org.example.altn72_projet_sara_theo_manon.ui.controller;
 
-import jakarta.validation.Valid;
-import org.example.altn72_projet_sara_theo_manon.ui.service.EntrepriseForm;
-import org.example.altn72_projet_sara_theo_manon.ui.service.EntrepriseReadService;
-import org.example.altn72_projet_sara_theo_manon.ui.service.EntrepriseWriteService;
-import org.example.altn72_projet_sara_theo_manon.ui.viewmodel.PageResponse;
-import org.example.altn72_projet_sara_theo_manon.ui.viewmodel.EntrepriseView;
+import org.example.altn72_projet_sara_theo_manon.model.Entreprise;
+import org.example.altn72_projet_sara_theo_manon.ui.service.EntrepriseService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/entreprises")
 public class EntrepriseUiController {
 
-    private final EntrepriseReadService readService;
-    private final EntrepriseWriteService writeService;
+    private final EntrepriseService entrepriseService;
 
-    public EntrepriseUiController(EntrepriseReadService readService, EntrepriseWriteService writeService) {
-        this.readService = readService;
-        this.writeService = writeService;
+    public EntrepriseUiController(EntrepriseService entrepriseService) {
+        this.entrepriseService = entrepriseService;
     }
 
     @GetMapping
-    public String list(@RequestParam(defaultValue = "0") int page,
-                       @RequestParam(defaultValue = "10") int size,
-                       @RequestParam(required = false) String q,
-                       Model model) {
-        PageResponse<EntrepriseView> res = readService.list(page, size, q);
-        model.addAttribute("page", res);
-        model.addAttribute("query", q);
-        model.addAttribute("pageTitle", "Entreprises");
+    public String showListEntreprises(Model model) {
+        List<Entreprise> listEntreprises = entrepriseService.getAllEntreprise();
+        model.addAttribute("listEntreprises", listEntreprises);
         return "entreprise/list";
     }
 
     @GetMapping("/{id}")
-    public String detail(@PathVariable Integer id, Model model) {
-        var opt = readService.byId(id);
-        if (opt.isEmpty()) return "error/404";
-        model.addAttribute("e", opt.get());
-        model.addAttribute("pageTitle", "Détail entreprise");
+    public String showDetailsEntreprise(@PathVariable Integer id,  Model model) {
+        Optional<Entreprise> entreprise = entrepriseService.getEntrepriseById(id);
+        model.addAttribute("entreprise", entreprise.orElseThrow(() -> new IllegalStateException("Cet entreprise n'existe pas")));
         return "entreprise/detail";
     }
 
     @GetMapping("/new")
-    public String newForm(Model model) {
-        model.addAttribute("form", new EntrepriseForm("", "", ""));
-        model.addAttribute("pageTitle", "Nouvelle entreprise");
+    public String addNewEntreprise(Model model) {
+        model.addAttribute("entreprise", new Entreprise());
+        model.addAttribute("id", null);
+        model.addAttribute("formAction", "entreprises/update");
         return "entreprise/form";
     }
 
-    @PostMapping
-    public String create(@Valid @ModelAttribute("form") EntrepriseForm form, BindingResult br, Model model) {
-        if (br.hasErrors()) {
-            model.addAttribute("pageTitle", "Nouvelle entreprise");
-            return "entreprise/form";
-        }
-        var created = writeService.create(form);
-        return "redirect:/entreprises/" + created.id();
+    @PostMapping("/update")
+    public String createEntreprise(@RequestBody Entreprise entreprise) {
+        entrepriseService.addEntreprise(entreprise);
+        return "redirect:/entreprises/"+entreprise.getId();
+    }
+
+    @PostMapping("{id}/delete")
+    public String deleteEntreprise(@PathVariable Integer id) {
+        entrepriseService.deleteEntreprise(id);
+        return "redirect:/entreprises/";
     }
 
     @GetMapping("/{id}/edit")
-    public String editForm(@PathVariable Integer id, Model model) {
-        var opt = readService.byId(id);
-        if (opt.isEmpty()) return "error/404";
-        var e = opt.get();
-        model.addAttribute("form", new EntrepriseForm(e.raisonSociale(), e.adresse(), e.infos()));
-        model.addAttribute("id", id);
-        model.addAttribute("pageTitle", "Modifier entreprise");
+    public String editEntreprise(@PathVariable Integer id,  Model model) {
+        Optional<Entreprise> entreprise = entrepriseService.getEntrepriseById(id);
+        model.addAttribute("entreprise", entreprise.orElse(null));
+        model.addAttribute("id", entreprise.isPresent() ? id :  null);
+        model.addAttribute("formAction", entreprise.isPresent() ? "entreprises/update/" + id :  "entreprises/update");
+
         return "entreprise/form";
     }
 
-    @PostMapping("/{id}")
-    public String update(@PathVariable Integer id,
-                         @Valid @ModelAttribute("form") EntrepriseForm form,
-                         BindingResult br, Model model) {
-        if (br.hasErrors()) {
-            model.addAttribute("id", id);
-            model.addAttribute("pageTitle", "Modifier entreprise");
-            return "entreprise/form";
+    @PostMapping("/update/{id}")
+    public String updateEntreprise(@PathVariable Integer id) {
+        Optional<Entreprise> entreprise = entrepriseService.getEntrepriseById(id);
+        if(entreprise.isPresent()) {
+            entrepriseService.updateEntreprise(id, entreprise.get());
         }
-        var updated = writeService.update(id, form);
-        return updated.isPresent() ? "redirect:/entreprises/" + id : "error/404";
-    }
+        else{
+            return "error/404";
+        }
 
-    @PostMapping("/{id}/delete")
-    public String delete(@PathVariable Integer id) {
-        writeService.delete(id);
-        return "redirect:/entreprises";
+        return "redirect:/entreprises/"+id;
     }
 }

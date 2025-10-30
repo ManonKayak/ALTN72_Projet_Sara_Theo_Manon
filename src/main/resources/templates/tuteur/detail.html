@@ -1,25 +1,24 @@
 <!DOCTYPE html>
 <html lang="fr" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{fragments/_layout}"
-      th:with="pageTitle='Détail tuteur'">
+      layout:decorate="~{fragments/_layout}">
 <head><title th:remove="all">Détail tuteur</title></head>
 <body>
-<section layout:fragment="content">
+<section layout:fragment="content">*
   <a class="btn btn-link mb-3" th:href="@{/tuteurs}">&larr; Retour</a>
 
   <div class="card shadow-sm">
     <div class="card-body">
-      <h3 class="card-title" th:text="${t.nomComplet}">Nom Prénom</h3>
+      <h3 class="card-title" th:text="${tuteur.nom} ${tuteur.prenom}">Nom Prénom</h3>
 
-      <p><strong>Poste :</strong> <span th:text="${t.poste}">Poste</span></p>
-      <p><strong>Email :</strong> <span th:text="${t.email}">Email</span></p>
-      <p><strong>Téléphone :</strong> <span th:text="${t.telephone}">Téléphone</span></p>
-      <p><strong>Entreprise :</strong> <span th:text="${t.entrepriseNom}">Entreprise</span></p>
+      <p><strong>Poste :</strong> <span th:text="${tuteur.poste}">Poste</span></p>
+      <p><strong>Email :</strong> <span th:text="${tuteur.email}">Email</span></p>
+      <p><strong>Téléphone :</strong> <span th:text="${tuteur.telephone}">Téléphone</span></p>
+      <p><strong>Entreprise :</strong> <span th:text="${tuteur.entrepriseNom}">Entreprise</span></p>
       <p><strong>Remarques :</strong></p>
-      <p th:text="${t.remarques}">Remarques…</p>
+      <p th:text="${tuteur.remarques}">Remarques…</p>
 
-      <a class="btn btn-outline-primary" th:href="@{'/tuteurs/' + ${t.id} + '/edit'}">Modifier</a>
+      <a class="btn btn-outline-primary" th:href="@{'/tuteurs/' + ${tuteur.id} + '/edit'}">Modifier</a>
     </div>
   </div>
 </section>

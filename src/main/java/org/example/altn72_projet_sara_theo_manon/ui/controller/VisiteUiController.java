@@ -1,91 +1,76 @@
 package org.example.altn72_projet_sara_theo_manon.ui.controller;
 
-import jakarta.validation.Valid;
+import org.example.altn72_projet_sara_theo_manon.model.Visite;
 import org.example.altn72_projet_sara_theo_manon.ui.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/visites")
 public class VisiteUiController {
 
-    private final VisiteReadService readService;
-    private final VisiteWriteService writeService;
+    private final VisiteService visiteService;
 
-    public VisiteUiController(VisiteReadService readService, VisiteWriteService writeService) {
-        this.readService = readService;
-        this.writeService = writeService;
+    public VisiteUiController(VisiteService visiteService) {
+        this.visiteService = visiteService;
     }
 
     @GetMapping
-    public String list(@RequestParam(defaultValue = "0") int page,
-                       @RequestParam(defaultValue = "10") int size,
-                       @RequestParam(required = false) String q,
-                       Model model) {
-        var res = readService.list(page, size, q);
-        model.addAttribute("page", res);
-        model.addAttribute("query", q);
-        model.addAttribute("pageTitle", "Visites");
+    public String showListVisites(Model model) {
+        List<Visite> listVisites = visiteService.getAllVisite();
+        model.addAttribute("listVisites", listVisites);
         return "visite/list";
     }
 
     @GetMapping("/{id}")
-    public String detail(@PathVariable Integer id, Model model) {
-        var opt = readService.byId(id);
-        if (opt.isEmpty()) return "error/404";
-        model.addAttribute("v", opt.get());
-        model.addAttribute("pageTitle", "Détail visite");
+    public String showDetailsVisite(@PathVariable Integer id,  Model model) {
+        Optional<Visite> visite = visiteService.getVisiteById(id);
+        model.addAttribute("visite", visite.orElseThrow(() -> new IllegalStateException("Cet visite n'existe pas")));
         return "visite/detail";
     }
 
     @GetMapping("/new")
-    public String newForm(Model model) {
-        model.addAttribute("form", new VisiteForm(null, null, "", null, null));
-        model.addAttribute("pageTitle", "Nouvelle visite");
+    public String addNewVisite(Model model) {
+        model.addAttribute("visite", new Visite());
+        model.addAttribute("id", null);
         return "visite/form";
     }
 
-    @PostMapping
-    public String create(@Valid @ModelAttribute("form") VisiteForm form, BindingResult br, Model model) {
-        if (br.hasErrors()) {
-            model.addAttribute("pageTitle", "Nouvelle visite");
-            return "visite/form";
-        }
-        var created = writeService.create(form);
-        return "redirect:/visites/" + created.id();
+    @PostMapping("/update")
+    public String createVisite(@RequestBody Visite visite) {
+        visiteService.addVisite(visite);
+        return "redirect:/visites/"+visite.getId();
+    }
+
+    @PostMapping("{id}/delete")
+    public String deleteVisite(@PathVariable Integer id) {
+        visiteService.deleteVisite(id);
+        return "redirect:/visites/";
     }
 
     @GetMapping("/{id}/edit")
-    public String editForm(@PathVariable Integer id, Model model) {
-        var opt = readService.byId(id);
-        if (opt.isEmpty()) return "error/404";
-        var v = opt.get();
-        model.addAttribute("form", new VisiteForm(
-                v.date(), v.format(), v.commentaire(), null, null
-        ));
-        model.addAttribute("id", id);
-        model.addAttribute("pageTitle", "Modifier visite");
+    public String editVisite(@PathVariable Integer id,  Model model) {
+        Optional<Visite> visite = visiteService.getVisiteById(id);
+        model.addAttribute("visite", visite.orElse(null));
+        model.addAttribute("id", visite.isPresent() ? id :  null);
+
         return "visite/form";
     }
 
-    @PostMapping("/{id}")
-    public String update(@PathVariable Integer id,
-                         @Valid @ModelAttribute("form") VisiteForm form,
-                         BindingResult br, Model model) {
-        if (br.hasErrors()) {
-            model.addAttribute("id", id);
-            model.addAttribute("pageTitle", "Modifier visite");
-            return "visite/form";
+    @PostMapping("/update/{id}")
+    public String updateVisite(@PathVariable Integer id) {
+        Optional<Visite> visite = visiteService.getVisiteById(id);
+        if(visite.isPresent()) {
+            visiteService.updateVisite(id, visite.get());
         }
-        var updated = writeService.update(id, form);
-        return updated.isPresent() ? "redirect:/visites/" + id : "error/404";
-    }
+        else{
+            return "error/404";
+        }
 
-    @PostMapping("/{id}/delete")
-    public String delete(@PathVariable Integer id) {
-        writeService.delete(id);
-        return "redirect:/visites";
+        return "redirect:/visites/"+id;
     }
 }

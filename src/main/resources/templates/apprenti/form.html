@@ -9,7 +9,7 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <h3 class="card-title" th:text="${id} != null ? 'Modifier apprenti' : 'Nouvel apprenti'">Form</h3>
-            <form th:if="${id != null}" th:action="@{|/apprentis/${id}|}" method="post" th:object="${form}" novalidate>
+            <form th:action="${formAction}" method="post" th:object="${apprenti}" novalidate>
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label class="form-label" for="prenom">Prénom</label>

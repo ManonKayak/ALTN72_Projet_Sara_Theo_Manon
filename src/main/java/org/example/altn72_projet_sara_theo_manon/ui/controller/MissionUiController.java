@@ -1,89 +1,76 @@
 package org.example.altn72_projet_sara_theo_manon.ui.controller;
 
-import jakarta.validation.Valid;
+import org.example.altn72_projet_sara_theo_manon.model.Mission;
 import org.example.altn72_projet_sara_theo_manon.ui.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/missions")
 public class MissionUiController {
 
-    private final MissionReadService readService;
-    private final MissionWriteService writeService;
+    private final MissionService missionService;
 
-    public MissionUiController(MissionReadService readService, MissionWriteService writeService) {
-        this.readService = readService;
-        this.writeService = writeService;
+    public MissionUiController(MissionService missionService) {
+        this.missionService = missionService;
     }
 
     @GetMapping
-    public String list(@RequestParam(defaultValue = "0") int page,
-                       @RequestParam(defaultValue = "10") int size,
-                       @RequestParam(required = false) String q,
-                       Model model) {
-        var res = readService.list(page, size, q);
-        model.addAttribute("page", res);
-        model.addAttribute("query", q);
-        model.addAttribute("pageTitle", "Missions");
+    public String showListMissions(Model model) {
+        List<Mission> listMissions = missionService.getAllMission();
+        model.addAttribute("listMissions", listMissions);
         return "mission/list";
     }
 
     @GetMapping("/{id}")
-    public String detail(@PathVariable Integer id, Model model) {
-        var opt = readService.byId(id);
-        if (opt.isEmpty()) return "error/404";
-        model.addAttribute("m", opt.get());
-        model.addAttribute("pageTitle", "Détail mission");
+    public String showDetailsMission(@PathVariable Integer id,  Model model) {
+        Optional<Mission> mission = missionService.getMissionById(id);
+        model.addAttribute("mission", mission.orElseThrow(() -> new IllegalStateException("Cet mission n'existe pas")));
         return "mission/detail";
     }
 
     @GetMapping("/new")
-    public String newForm(Model model) {
-        model.addAttribute("form", new MissionForm("", "", ""));
-        model.addAttribute("pageTitle", "Nouvelle mission");
+    public String addNewMission(Model model) {
+        model.addAttribute("mission", new Mission());
+        model.addAttribute("id", null);
         return "mission/form";
     }
 
-    @PostMapping
-    public String create(@Valid @ModelAttribute("form") MissionForm form, BindingResult br, Model model) {
-        if (br.hasErrors()) {
-            model.addAttribute("pageTitle", "Nouvelle mission");
-            return "mission/form";
-        }
-        var created = writeService.create(form);
-        return "redirect:/missions/" + created.id();
+    @PostMapping("/update")
+    public String createMission(@RequestBody Mission mission) {
+        missionService.addMission(mission);
+        return "redirect:/missions/"+mission.getId();
+    }
+
+    @PostMapping("{id}/delete")
+    public String deleteMission(@PathVariable Integer id) {
+        missionService.deleteMission(id);
+        return "redirect:/missions/";
     }
 
     @GetMapping("/{id}/edit")
-    public String editForm(@PathVariable Integer id, Model model) {
-        var opt = readService.byId(id);
-        if (opt.isEmpty()) return "error/404";
-        var m = opt.get();
-        model.addAttribute("form", new MissionForm(m.motsCles(), m.metierCible(), m.commentaires()));
-        model.addAttribute("id", id);
-        model.addAttribute("pageTitle", "Modifier mission");
+    public String editMission(@PathVariable Integer id,  Model model) {
+        Optional<Mission> mission = missionService.getMissionById(id);
+        model.addAttribute("mission", mission.orElse(null));
+        model.addAttribute("id", mission.isPresent() ? id :  null);
+
         return "mission/form";
     }
 
-    @PostMapping("/{id}")
-    public String update(@PathVariable Integer id,
-                         @Valid @ModelAttribute("form") MissionForm form,
-                         BindingResult br, Model model) {
-        if (br.hasErrors()) {
-            model.addAttribute("id", id);
-            model.addAttribute("pageTitle", "Modifier mission");
-            return "mission/form";
+    @PostMapping("/update/{id}")
+    public String updateMission(@PathVariable Integer id) {
+        Optional<Mission> mission = missionService.getMissionById(id);
+        if(mission.isPresent()) {
+            missionService.updateMission(id, mission.get());
         }
-        var updated = writeService.update(id, form);
-        return updated.isPresent() ? "redirect:/missions/" + id : "error/404";
-    }
+        else{
+            return "error/404";
+        }
 
-    @PostMapping("/{id}/delete")
-    public String delete(@PathVariable Integer id) {
-        writeService.delete(id);
-        return "redirect:/missions";
+        return "redirect:/missions/"+id;
     }
 }

@@ -11,18 +11,18 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <h3 class="card-title">
-                <span th:text="${m.motsCles}">Mots clés</span>
-                <small class="text-muted">— <span th:text="${m.metierCible}">Métier</span></small>
+                <span th:text="${mission.motsCles}">Mots clés</span>
+                <small class="text-muted">— <span th:text="${mission.metierCible}">Métier</span></small>
             </h3>
 
             <div class="mt-3">
                 <h6 class="text-uppercase text-muted">Commentaires</h6>
-                <p class="mb-0" th:text="${m.commentaires}">…</p>
+                <p class="mb-0" th:text="${mission.commentaires}">…</p>
             </div>
 
             <div class="mt-4 d-flex gap-2">
-                <a class="btn btn-outline-primary" th:href="@{'/missions/' + ${m.id} + '/edit'}">Modifier</a>
-                <form th:action="@{'/missions/' + ${m.id} + '/delete'}" method="post" class="d-inline">
+                <a class="btn btn-outline-primary" th:href="@{'/missions/' + ${mission.id} + '/edit'}">Modifier</a>
+                <form th:action="@{'/missions/' + ${mission.id} + '/delete'}" method="post" class="d-inline">
                     <button class="btn btn-outline-danger" onclick="return confirm('Supprimer ?')">Supprimer</button>
                 </form>
             </div>

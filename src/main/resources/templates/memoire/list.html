@@ -14,11 +14,11 @@
     </div>
 
     <form class="row g-2 mb-3" method="get" th:action="@{/memoires}">
-        <div class="col-auto">
-            <label for="q" class="visually-hidden">Rechercher</label>
-            <input id="q" class="form-control" type="search" name="q"
-                   placeholder="Rechercher (sujet, commentaire…)" th:value="${query}">
-        </div>
+<!--        <div class="col-auto">-->
+<!--            <label for="q" class="visually-hidden">Rechercher</label>-->
+<!--            <input id="q" class="form-control" type="search" name="q"-->
+<!--                   placeholder="Rechercher (sujet, commentaire…)" th:value="${query}">-->
+<!--        </div>-->
         <div class="col-auto">
             <button class="btn btn-outline-secondary">Filtrer</button>
         </div>
@@ -37,7 +37,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="m : ${page.content}">
+                <tr th:each="m : ${listMemoires}">
                     <td th:text="${m.id}">1</td>
                     <td>
                         <a th:href="@{'/memoires/' + ${m.id}}" th:text="${m.sujet}">Sujet</a>
@@ -60,22 +60,22 @@
         </div>
     </div>
 
-    <nav class="mt-3" th:if="${page.totalPages > 1}">
-        <ul class="pagination">
-            <li class="page-item" th:classappend="${page.page == 0} ? ' disabled' : ''">
-                <a class="page-link"
-                   th:href="@{'/memoires?page=' + ${page.page - 1} + '&size=' + ${page.size}}">Préc.</a>
-            </li>
-            <li class="page-item disabled">
-                <span class="page-link"
-                      th:text="${'Page ' + (page.page + 1) + ' / ' + page.totalPages}">Page 1/1</span>
-            </li>
-            <li class="page-item" th:classappend="${page.page + 1 >= page.totalPages} ? ' disabled' : ''">
-                <a class="page-link"
-                   th:href="@{'/memoires?page=' + ${page.page + 1} + '&size=' + ${page.size}}">Suiv.</a>
-            </li>
-        </ul>
-    </nav>
+<!--    <nav class="mt-3" th:if="${page.totalPages > 1}">-->
+<!--        <ul class="pagination">-->
+<!--            <li class="page-item" th:classappend="${page.page == 0} ? ' disabled' : ''">-->
+<!--                <a class="page-link"-->
+<!--                   th:href="@{'/memoires?page=' + ${page.page - 1} + '&size=' + ${page.size}}">Préc.</a>-->
+<!--            </li>-->
+<!--            <li class="page-item disabled">-->
+<!--                <span class="page-link"-->
+<!--                      th:text="${'Page ' + (page.page + 1) + ' / ' + page.totalPages}">Page 1/1</span>-->
+<!--            </li>-->
+<!--            <li class="page-item" th:classappend="${page.page + 1 >= page.totalPages} ? ' disabled' : ''">-->
+<!--                <a class="page-link"-->
+<!--                   th:href="@{'/memoires?page=' + ${page.page + 1} + '&size=' + ${page.size}}">Suiv.</a>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </nav>-->
 </section>
 </body>
 </html>

@@ -10,16 +10,16 @@
 
   <div class="card shadow-sm">
     <div class="card-body">
-      <h3 class="card-title">Visite #<span th:text="${v.id}">1</span></h3>
-      <p><strong>Date :</strong> <span th:text="${v.date}">2025</span></p>
-      <p><strong>Format :</strong> <span th:text="${v.format}">1</span></p>
-      <p><strong>Apprenti :</strong> <span th:text="${v.apprentiNom}">Apprenti</span></p>
-      <p><strong>Entreprise :</strong> <span th:text="${v.entrepriseNom}">Entreprise</span></p>
+      <h3 class="card-title">Visite #<span th:text="${visite.id}">1</span></h3>
+      <p><strong>Date :</strong> <span th:text="${visite.date}">2025</span></p>
+      <p><strong>Format :</strong> <span th:text="${visite.format}">1</span></p>
+      <p><strong>Apprenti :</strong> <span th:text="${visite.apprenti.nom} ${visite.apprenti.prenom}">Apprenti</span></p>
+      <p><strong>Entreprise :</strong> <span th:text="${visite.entreprise.raisonSociale}">Entreprise</span></p>
       <p><strong>Commentaire :</strong></p>
-      <p th:text="${v.commentaire}">—</p>
+      <p th:text="${visite.commentaire}">—</p>
 
-      <a class="btn btn-outline-primary" th:href="@{'/visites/' + ${v.id} + '/edit'}">Modifier</a>
-      <form th:action="@{'/visites/' + ${v.id} + '/delete'}" method="post" class="d-inline">
+      <a class="btn btn-outline-primary" th:href="@{'/visites/' + ${visite.id} + '/edit'}">Modifier</a>
+      <form th:action="@{'/visites/' + ${visite.id} + '/delete'}" method="post" class="d-inline">
         <button class="btn btn-outline-danger" onclick="return confirm('Supprimer ?')">Supprimer</button>
       </form>
     </div>
