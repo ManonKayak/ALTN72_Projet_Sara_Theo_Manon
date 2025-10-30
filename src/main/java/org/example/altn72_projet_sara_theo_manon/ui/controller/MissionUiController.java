@@ -42,7 +42,7 @@ public class MissionUiController {
     }
 
     @PostMapping("/update")
-    public String createMission(@RequestBody Mission mission) {
+    public String createMission(@ModelAttribute Mission mission) {
         missionService.addMission(mission);
         return "redirect:/missions/"+mission.getId();
     }
@@ -50,7 +50,7 @@ public class MissionUiController {
     @PostMapping("{id}/delete")
     public String deleteMission(@PathVariable Integer id) {
         missionService.deleteMission(id);
-        return "redirect:/missions/";
+        return "redirect:/missions";
     }
 
     @GetMapping("/{id}/edit")
@@ -64,15 +64,8 @@ public class MissionUiController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateMission(@PathVariable Integer id) {
-        Optional<Mission> mission = missionService.getMissionById(id);
-        if(mission.isPresent()) {
-            missionService.updateMission(id, mission.get());
-        }
-        else{
-            return "error/404";
-        }
-
+    public String updateMission(@PathVariable Integer id, @ModelAttribute Mission mission) {
+        missionService.updateMission(id, mission);
         return "redirect:/missions/"+id;
     }
 }

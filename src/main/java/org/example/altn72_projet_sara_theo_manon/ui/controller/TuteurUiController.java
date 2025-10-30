@@ -44,7 +44,7 @@ public class TuteurUiController {
     }
 
     @PostMapping("/update")
-    public String createTuteur(@RequestBody Tuteur tuteur) {
+    public String createTuteur(@ModelAttribute Tuteur tuteur) {
         tuteurService.addTuteur(tuteur);
         return "redirect:/tuteurs/"+tuteur.getId();
     }
@@ -52,7 +52,7 @@ public class TuteurUiController {
     @PostMapping("{id}/delete")
     public String deleteTuteur(@PathVariable Integer id) {
         tuteurService.deleteTuteur(id);
-        return "redirect:/tuteurs/";
+        return "redirect:/tuteurs";
     }
 
     @GetMapping("/{id}/edit")
@@ -66,15 +66,8 @@ public class TuteurUiController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateTuteur(@PathVariable Integer id) {
-        Optional<Tuteur> tuteur = tuteurService.getTuteurById(id);
-        if(tuteur.isPresent()) {
-            tuteurService.updateTuteur(id, tuteur.get());
-        }
-        else{
-            return "error/404";
-        }
-
+    public String updateTuteur(@PathVariable Integer id, @ModelAttribute Tuteur tuteur) {
+        tuteurService.updateTuteur(id, tuteur);
         return "redirect:/tuteurs/"+id;
     }
 }

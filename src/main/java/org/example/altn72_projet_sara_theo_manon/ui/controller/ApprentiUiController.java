@@ -50,7 +50,7 @@ public class ApprentiUiController {
     @PostMapping("{id}/delete")
     public String deleteApprenti(@PathVariable Integer id) {
         apprentiService.deleteApprenti(id);
-        return "redirect:/apprentis/";
+        return "redirect:/apprentis";
     }
 
     @GetMapping("/{id}/edit")

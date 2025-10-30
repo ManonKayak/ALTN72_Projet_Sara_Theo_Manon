@@ -42,7 +42,7 @@ public class EntrepriseUiController {
     }
 
     @PostMapping("/update")
-    public String createEntreprise(@RequestBody Entreprise entreprise) {
+    public String createEntreprise(@ModelAttribute Entreprise entreprise) {
         entrepriseService.addEntreprise(entreprise);
         return "redirect:/entreprises/"+entreprise.getId();
     }
@@ -50,7 +50,7 @@ public class EntrepriseUiController {
     @PostMapping("{id}/delete")
     public String deleteEntreprise(@PathVariable Integer id) {
         entrepriseService.deleteEntreprise(id);
-        return "redirect:/entreprises/";
+        return "redirect:/entreprises";
     }
 
     @GetMapping("/{id}/edit")
@@ -64,15 +64,8 @@ public class EntrepriseUiController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateEntreprise(@PathVariable Integer id) {
-        Optional<Entreprise> entreprise = entrepriseService.getEntrepriseById(id);
-        if(entreprise.isPresent()) {
-            entrepriseService.updateEntreprise(id, entreprise.get());
-        }
-        else{
-            return "error/404";
-        }
-
+    public String updateEntreprise(@PathVariable Integer id, @ModelAttribute  Entreprise entreprise) {
+        entrepriseService.updateEntreprise(id, entreprise);
         return "redirect:/entreprises/"+id;
     }
 }

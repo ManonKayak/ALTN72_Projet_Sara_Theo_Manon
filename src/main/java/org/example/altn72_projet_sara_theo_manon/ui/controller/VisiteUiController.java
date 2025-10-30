@@ -43,7 +43,7 @@ public class VisiteUiController {
     }
 
     @PostMapping("/update")
-    public String createVisite(@RequestBody Visite visite) {
+    public String createVisite(@ModelAttribute Visite visite) {
         visiteService.addVisite(visite);
         return "redirect:/visites/"+visite.getId();
     }
@@ -51,7 +51,7 @@ public class VisiteUiController {
     @PostMapping("{id}/delete")
     public String deleteVisite(@PathVariable Integer id) {
         visiteService.deleteVisite(id);
-        return "redirect:/visites/";
+        return "redirect:/visites";
     }
 
     @GetMapping("/{id}/edit")
@@ -65,15 +65,8 @@ public class VisiteUiController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateVisite(@PathVariable Integer id) {
-        Optional<Visite> visite = visiteService.getVisiteById(id);
-        if(visite.isPresent()) {
-            visiteService.updateVisite(id, visite.get());
-        }
-        else{
-            return "error/404";
-        }
-
+    public String updateVisite(@PathVariable Integer id, @ModelAttribute Visite visite) {
+        visiteService.updateVisite(id, visite);
         return "redirect:/visites/"+id;
     }
 }

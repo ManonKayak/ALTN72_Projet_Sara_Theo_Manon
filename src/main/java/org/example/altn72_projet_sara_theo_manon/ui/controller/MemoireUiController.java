@@ -42,7 +42,7 @@ public class MemoireUiController {
     }
 
     @PostMapping("/update")
-    public String createMemoire(@RequestBody Memoire memoire) {
+    public String createMemoire(@ModelAttribute Memoire memoire) {
         memoireService.addMemoire(memoire);
         return "redirect:/memoires/"+memoire.getId();
     }
@@ -50,7 +50,7 @@ public class MemoireUiController {
     @PostMapping("{id}/delete")
     public String deleteMemoire(@PathVariable Integer id) {
         memoireService.deleteMemoire(id);
-        return "redirect:/memoires/";
+        return "redirect:/memoires";
     }
 
     @GetMapping("/{id}/edit")
@@ -64,14 +64,8 @@ public class MemoireUiController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateMemoire(@PathVariable Integer id) {
-        Optional<Memoire> memoire = memoireService.getMemoireById(id);
-        if(memoire.isPresent()) {
-            memoireService.updateMemoire(id, memoire.get());
-        }
-        else{
-            return "error/404";
-        }
+    public String updateMemoire(@PathVariable Integer id, @ModelAttribute Memoire memoire) {
+        memoireService.updateMemoire(id, memoire);
 
         return "redirect:/memoires/"+id;
     }
