@@ -11,16 +11,34 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="mb-0">Apprentis</h2>
         <a class="btn btn-primary" th:href="@{/apprentis/new}">Nouvel apprenti</a>
+        <a class="btn btn-primary" th:href="@{/apprentis/new}">Passer à l'année suivante</a>
     </div>
 
-    <form class="row g-2 mb-3" method="get" th:action="@{/apprentis}">
-<!--        <div class="col-auto">-->
-<!--            <label for="q" class="visually-hidden">Rechercher</label>-->
-<!--            <input id="q" class="form-control" type="search" name="q"-->
-<!--                   placeholder="Rechercher..." th:value="${query}">-->
-<!--        </div>-->
+    <div>
+        <h3 th:text="${success}"></h3>
+    </div>
+
+    <form class="row g-3 align-items-center mb-3" method="get" th:action="@{/apprentis/filter}">
         <div class="col-auto">
-            <button class="btn btn-outline-secondary">Filtrer</button>
+            <select class="form-select" name="type" required>
+                <option value="" selected disabled>Type de filtre</option>
+                <option value="nom">Nom</option>
+                <option value="entreprise">Entreprise</option>
+                <option value="mission">Mission</option>
+                <option value="annee">Année académique</option>
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <input type="text"
+                   class="form-control"
+                   name="valeur"
+                   placeholder="Entrez votre recherche..."
+                   required>
+        </div>
+
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Filtrer</button>
         </div>
     </form>
 
@@ -42,13 +60,11 @@
                 <tbody>
                 <tr th:each="apprenti : ${listApprentis}">
                     <td th:text="${apprenti.id}">1</td>
-<!--                    <td>-->
-<!--                        <a th:href="@{'/apprentis/' + ${apprenti.id}}" th:text="${apprenti.nom}">Nom</a>-->
-<!--                        <div class="small text-muted" th:text="${apprenti.mail}">mail</div>-->
-<!--                    </td>-->
                     <td th:text="${apprenti.nom}">Nom</td>
                     <td th:text="${apprenti.prenom}">Prenom</td>
-                    <td th:href="@{'/apprentis/' + ${apprenti.id}}" th:text="${apprenti.mail}">mail</td>
+                    <td>
+                        <a th:text="${apprenti.mail}" th:href="@{'/apprentis/' + ${apprenti.id}}">mail</a>
+                    </td>
 
                     <td th:text="${apprenti.anneeAcademique}">2025</td>
                     <td th:text="${apprenti.niveau}">1</td>
@@ -67,25 +83,9 @@
                 </tr>
                 </tbody>
             </table>
+            <div class="invalid-feedback d-block" th:if="${listApprentis.isEmpty()}" th:text="'La liste est vide...'"></div>
         </div>
     </div>
-
-<!--    <nav class="mt-3" th:if="${page.totalPages > 1}">-->
-<!--        <ul class="pagination">-->
-<!--            <li class="page-item" th:classappend="${page.page == 0} ? ' disabled' : ''">-->
-<!--                <a class="page-link"-->
-<!--                   th:href="@{'/apprentis?page=' + ${page.page - 1} + '&size=' + ${page.size}}">Préc.</a>-->
-<!--            </li>-->
-<!--            <li class="page-item disabled">-->
-<!--                <span class="page-link"-->
-<!--                      th:text="${'Page ' + (page.page + 1) + ' / ' + page.totalPages}">Page 1/1</span>-->
-<!--            </li>-->
-<!--            <li class="page-item" th:classappend="${page.page + 1 >= page.totalPages} ? ' disabled' : ''">-->
-<!--                <a class="page-link"-->
-<!--                   th:href="@{'/apprentis?page=' + ${page.page + 1} + '&size=' + ${page.size}}">Suiv.</a>-->
-<!--            </li>-->
-<!--        </ul>-->
-<!--    </nav>-->
 </section>
 </body>
 </html>

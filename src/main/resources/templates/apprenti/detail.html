@@ -13,6 +13,9 @@
             <p class="text-muted mb-1"><strong>Téléphone :</strong> <span th:text="${apprenti.telephone}"></span></p>
             <p class="text-muted mb-1"><strong>Année académique :</strong> <span th:text="${apprenti.anneeAcademique}"></span></p>
             <p class="text-muted mb-1"><strong>Niveau :</strong> <span th:text="${apprenti.niveau}"></span></p>
+            <p class="text-muted mb-1"><strong>Entreprise :</strong> <span th:href="@{'/entreprises/' + ${apprenti.entreprise.id}}" th:text="${apprenti.entreprise.raisonSociale}"></span></p>
+            <p class="text-muted mb-1"><strong>Mission :</strong> <span th:href="@{'/missions/' + ${apprenti.mission.id}}" th:text="${apprenti.mission.motsCles}"></span></p>
+            <p class="text-muted mb-1"><strong>Mémoire :</strong> <span th:href="@{'/memoires/' + ${apprenti.memoire.id}}" th:text="${apprenti.memoire.sujet}"></span></p>
             <p class="mt-3">
                 <a class="btn btn-outline-primary" th:href="@{|/apprentis/${apprenti.id}/edit|}">Modifier</a>
             </p>

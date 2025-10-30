@@ -15,9 +15,9 @@
             method="post" th:object="${entreprise}" novalidate>
           <div class="row g-3">
               <div class="col-md-6">
-                  <label class="form-label" for="raison-sociale">Raison sociale</label>
-                  <input id="raison-sociale" class="form-control" th:field="*{raisonSociale}" />
-                  <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('raison-sociale')}" th:errors="*{raisonSociale}"></div>
+                  <label class="form-label" for="raison_sociale">Raison sociale</label>
+                  <input id="raison_sociale" class="form-control" th:field="*{raisonSociale}" />
+                  <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('raison_sociale')}" th:errors="*{raisonSociale}"></div>
               </div>
               <div class="col-md-6">
                   <label class="form-label" for="adresse">Adresse</label>

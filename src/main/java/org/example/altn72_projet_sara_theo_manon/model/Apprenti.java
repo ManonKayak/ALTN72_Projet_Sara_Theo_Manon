@@ -1,7 +1,6 @@
 package org.example.altn72_projet_sara_theo_manon.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "apprenti", schema = "projectDB")

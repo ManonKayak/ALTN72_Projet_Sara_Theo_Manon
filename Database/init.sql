@@ -1,5 +1,4 @@
 CREATE DATABASE IF NOT EXISTS projectDB;
-
 USE projectDB;
 
 CREATE TABLE IF NOT EXISTS niveau (
@@ -87,6 +86,12 @@ INSERT INTO niveau (name) VALUES
                               ('I2'),
                               ('I3');
 
+INSERT INTO annee_academique (years, active) VALUES
+                                                 ('2022-2023', FALSE),
+                                                 ('2023-2024', FALSE),
+                                                 ('2024-2025', TRUE),
+                                                 ('2025-2026', FALSE);
+
 INSERT INTO entreprise (raison_sociale, adresse, infos) VALUES
                                                             ('TechSolutions', '123 Rue de Paris, Paris', 'Entreprise spécialisée en développement logiciel.'),
                                                             ('InnoTech', '456 Avenue des Champs, Lyon', 'Innovation et conseil en technologies de l''information.'),
@@ -121,7 +126,7 @@ INSERT INTO tuteur (poste, nom, prenom, email, telephone, remarques, entreprise_
                                                                                         ('Ingénieur IA', 'Rousseau', 'Julien', 'julien.rousseau@aiinnovators.com', '0678901234', 'Doctorat en intelligence artificielle.', 7),
                                                                                         ('Administrateur Réseau', 'Durand', 'Élodie', 'elodie.durand@networkpros.fr', '0689012345', 'Expérience en gestion de réseaux complexes.', 8),
                                                                                         ('Technical Lead', 'Fournier', 'Antoine', 'antoine.fournier@softengine.com', '0690123456', '10 ans d''expérience en développement logiciel.', 9),
-                                                                                        ('Product Owner', 'Girard', 'Laura', 'laura.girard@cloud experts.com', '0601234567', 'Expertise en gestion de produits tech.', 10);
+                                                                                        ('Product Owner', 'Girard', 'Laura', 'laura.girard@cloudexperts.com', '0601234567', 'Expertise en gestion de produits tech.', 10);
 
 INSERT INTO memoire (sujet, note, commentaire, date_soutenance, note_soutenance, commentaire_soutenance) VALUES
                                                                                                              ('Optimisation des requêtes SQL pour les applications web', 16.5, 'Très bon travail sur l''analyse des performances.', 20250615, 17.0, 'Présentation claire et réponse aux questions pertinentes.'),
@@ -136,16 +141,16 @@ INSERT INTO memoire (sujet, note, commentaire, date_soutenance, note_soutenance,
                                                                                                              ('Développement d''un chatbot avec NLP', 17.0, 'Chatbot fonctionnel et bien entraîné.', 20250725, 17.5, 'Bonne défense, mais quelques limites identifiées.');
 
 INSERT INTO apprenti (annee_academique, majeure, nom, prenom, mail, telephone, remarques, niveau, archive, entreprise_id, mission_id, tuteur_id, memoire_id) VALUES
-                                                                                                                                                                 (2025, 1, 'Leroy', 'Hugo', 'hugo.leroy@etudiant.fr', '0712345678', 'Motivé et autonome.', 1, FALSE, 1, 1, 1, 1),
-                                                                                                                                                                 (2025, 2, 'Durand', 'Emma', 'emma.durand@etudiant.fr', '0723456789', 'Très bonne compréhension des concepts.', 2, FALSE, 2, 2, 2, 2),
-                                                                                                                                                                 (2025, 1, 'Martin', 'Lucas', 'lucas.martin@etudiant.fr', '0734567890', 'Bon travail d''équipe.', 1, FALSE, 3, 3, 3, 3),
-                                                                                                                                                                 (2025, 3, 'Bernard', 'Chloé', 'chloe.bernard@etudiant.fr', '0745678901', 'Excellente analyse technique.', 3, FALSE, 4, 4, 4, 4),
-                                                                                                                                                                 (2025, 2, 'Petit', 'Thomas', 'thomas.petit@etudiant.fr', '0756789012', 'Très impliqué dans les projets.', 2, FALSE, 5, 5, 5, 5),
-                                                                                                                                                                 (2025, 1, 'Moreau', 'Léa', 'lea.moreau@etudiant.fr', '0767890123', 'Bonne curiosité technique.', 1, FALSE, 6, 6, 6, 6),
-                                                                                                                                                                 (2025, 3, 'Lefevre', 'Antoine', 'antoine.lefevre@etudiant.fr', '0778901234', 'Autonome et rigoureux.', 3, FALSE, 7, 7, 7, 7),
-                                                                                                                                                                 (2025, 2, 'Rousseau', 'Camille', 'camille.rousseau@etudiant.fr', '0789012345', 'Très bonne communication.', 2, FALSE, 8, 8, 8, 8),
-                                                                                                                                                                 (2025, 1, 'Durand', 'Jules', 'jules.durand@etudiant.fr', '0790123456', 'Motivé et créatif.', 1, FALSE, 9, 9, 9, 9),
-                                                                                                                                                                 (2025, 3, 'Fournier', 'Manon', 'manon.fournier@etudiant.fr', '0701234567', 'Excellente gestion de projet.', 3, FALSE, 10, 10, 10, 10);
+                                                                                                                                                                 (3, 1, 'Leroy', 'Hugo', 'hugo.leroy@etudiant.fr', '0712345678', 'Motivé et autonome.', 1, FALSE, 1, 1, 1, 1),
+                                                                                                                                                                 (3, 2, 'Durand', 'Emma', 'emma.durand@etudiant.fr', '0723456789', 'Très bonne compréhension des concepts.', 2, FALSE, 2, 2, 2, 2),
+                                                                                                                                                                 (3, 1, 'Martin', 'Lucas', 'lucas.martin@etudiant.fr', '0734567890', 'Bon travail d''équipe.', 1, FALSE, 3, 3, 3, 3),
+                                                                                                                                                                 (3, 3, 'Bernard', 'Chloé', 'chloe.bernard@etudiant.fr', '0745678901', 'Excellente analyse technique.', 3, FALSE, 4, 4, 4, 4),
+                                                                                                                                                                 (3, 2, 'Petit', 'Thomas', 'thomas.petit@etudiant.fr', '0756789012', 'Très impliqué dans les projets.', 2, FALSE, 5, 5, 5, 5),
+                                                                                                                                                                 (3, 1, 'Moreau', 'Léa', 'lea.moreau@etudiant.fr', '0767890123', 'Bonne curiosité technique.', 1, FALSE, 6, 6, 6, 6),
+                                                                                                                                                                 (3, 3, 'Lefevre', 'Antoine', 'antoine.lefevre@etudiant.fr', '0778901234', 'Autonome et rigoureux.', 3, FALSE, 7, 7, 7, 7),
+                                                                                                                                                                 (3, 2, 'Rousseau', 'Camille', 'camille.rousseau@etudiant.fr', '0789012345', 'Très bonne communication.', 2, FALSE, 8, 8, 8, 8),
+                                                                                                                                                                 (3, 1, 'Durand', 'Jules', 'jules.durand@etudiant.fr', '0790123456', 'Motivé et créatif.', 1, FALSE, 9, 9, 9, 9),
+                                                                                                                                                                 (3, 3, 'Fournier', 'Manon', 'manon.fournier@etudiant.fr', '0701234567', 'Excellente gestion de projet.', 3, FALSE, 10, 10, 10, 10);
 
 INSERT INTO visite (date, format, commentaire, apprenti_id, entreprise_id) VALUES
                                                                                (20250510, 1, 'Première visite, bonne intégration.', 1, 1),

@@ -8,7 +8,7 @@ Connexion à la base de donnée :
 - login : root
 - mot de passe : verysecret
 Connexion sur l'application :
-- tuteur : tuteur
+- tuteur : pierre.martin@techsolutions.com
 - mot de passe : password
 
 ---

@@ -2,12 +2,12 @@ package org.example.altn72_projet_sara_theo_manon.ui.controller;
 
 import org.example.altn72_projet_sara_theo_manon.model.Apprenti;
 import org.example.altn72_projet_sara_theo_manon.model.Mission;
-import org.example.altn72_projet_sara_theo_manon.ui.requests.FilterRequest;
 import org.example.altn72_projet_sara_theo_manon.ui.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,17 +19,23 @@ public class ApprentiUiController {
     private final ApprentiService apprentiService;
     private final EntrepriseService entrepriseService;
     private final MissionService missionService;
+    private final TuteurService tuteurService;
+    private final MemoireService memoireService;
 
-    public ApprentiUiController(ApprentiService apprentiService, EntrepriseService entrepriseService, MissionService missionService) {
+    public ApprentiUiController(ApprentiService apprentiService, EntrepriseService entrepriseService, MissionService missionService,
+                                TuteurService tuteurService, MemoireService memoireService) {
         this.apprentiService = apprentiService;
         this.entrepriseService = entrepriseService;
         this.missionService = missionService;
+        this.tuteurService = tuteurService;
+        this.memoireService = memoireService;
     }
 
     @GetMapping
     public String showListApprentis(Model model) {
-        List<Apprenti> listApprentis = apprentiService.getAllApprenti();
+        List<Apprenti> listApprentis = apprentiService.getAllApprentiActifs();
         model.addAttribute("listApprentis", listApprentis);
+        model.addAttribute("success", "");
         return "apprenti/list";
     }
 
@@ -67,44 +73,62 @@ public class ApprentiUiController {
         model.addAttribute("id", apprenti.isPresent() ? id :  null);
         model.addAttribute("formAction", apprenti.isPresent() ? "/apprentis/update/" + id :  "/apprentis/update");
 
+        model.addAttribute("entreprises", entrepriseService.getAllEntreprise());
+        model.addAttribute("tuteurs", tuteurService.getAllTuteur());
+        model.addAttribute("memoires", memoireService.getAllMemoire());
+        model.addAttribute("missions", missionService.getAllMission());
+
         return "apprenti/form";
     }
 
     @PostMapping("/update/{id}")
-    public String updateApprenti(@PathVariable Integer id, @ModelAttribute Apprenti apprenti) {
-        apprentiService.updateApprenti(id, apprenti);
-        return "redirect:/apprentis/"+id;
+    public String updateApprenti(@PathVariable Integer id, @ModelAttribute Apprenti apprenti, Model model) {
+        boolean success = apprentiService.updateApprenti(id, apprenti);
+        model.addAttribute("success", success ? "Modification réussie !" : "Échec de la modification.");
+
+        return "redirect:/apprentis";
     }
 
     @GetMapping("/filter")
-    public String filterApprenti(@RequestBody FilterRequest filterRequest, Model model) {
-        List<Apprenti> list = List.of();
-        if (!filterRequest.Nom.isEmpty())
-        {
-            list = apprentiService.FilterApprentiByNom(filterRequest.Nom);
-            model.addAttribute("listApprentis", list);
+    public String filterApprenti(
+            @RequestParam String type,
+            @RequestParam String valeur,
+            Model model) {
 
-        }
-        if (!filterRequest.Entreprise.isEmpty())
-        {
-            var entreprise = entrepriseService.getEntrepriseByName(filterRequest.Entreprise);
-            list = apprentiService.FilterApprentiByEntreprise_Id(entreprise.getId());
-            model.addAttribute("listApprentis", list);
-        }
-        if (!filterRequest.Mission.isEmpty())
-        {
-            var missions = missionService.getMissionByMotsCles(filterRequest.Mission);
-            list = apprentiService.FilterApprentiByMission(missions.stream().map(Mission::getId).collect(Collectors.toList()));
-            model.addAttribute("listApprentis", list);
-        }
-        if (filterRequest.Annee != 0)
-        {
-            list = apprentiService.FilterApprentiByAnneeAcademique(filterRequest.Annee);
-            model.addAttribute("listApprentis", list);
+        List<Apprenti> list = new ArrayList<>();
+
+        switch (type) {
+            case "nom":
+                list = apprentiService.FilterApprentiByNom(valeur);
+                break;
+            case "entreprise":
+                var entreprise = entrepriseService.getEntrepriseByName(valeur);
+                if (entreprise != null) {
+                    list = apprentiService.FilterApprentiByEntreprise_Id(entreprise.getId());
+                }
+                break;
+            case "mission":
+                var missions = missionService.getMissionByMotsCles(valeur);
+                if (!missions.isEmpty()) {
+                    list = apprentiService.FilterApprentiByMission(missions.stream().map(Mission::getId).collect(Collectors.toList()));
+                }
+                break;
+            case "annee":
+                try {
+                    int annee = Integer.parseInt(valeur);
+                    list = apprentiService.FilterApprentiByAnneeAcademique(annee);
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+                break;
         }
 
-        if (list.isEmpty())
-            return "redirect:/apprentis?vide=true";
-        return "redirect:/apprentis";
+//        if (list.isEmpty()) {
+//            return "apprenti/list";
+//        }
+
+        model.addAttribute("listApprentis", list);
+        return "apprenti/list";
     }
+
 }
