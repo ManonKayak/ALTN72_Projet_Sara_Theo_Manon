@@ -2,6 +2,17 @@ CREATE DATABASE IF NOT EXISTS projectDB;
 
 USE projectDB;
 
+CREATE TABLE IF NOT EXISTS niveau (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS annee_academique (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    years TEXT NOT NULL,
+    active BOOLEAN NOT NULL DEFAULT TRUE
+);
+
 CREATE TABLE IF NOT EXISTS entreprise (
     id INT AUTO_INCREMENT PRIMARY KEY,
     raison_sociale TEXT NOT NULL,
@@ -46,17 +57,18 @@ CREATE TABLE IF NOT EXISTS apprenti (
     prenom TEXT NOT NULL,
     mail TEXT NOT NULL,
     telephone TEXT NOT NULL,
-    remarques TEXT NOT NULL,
+    remarques TEXT,
     niveau INT NOT NULL,
     archive BOOLEAN NOT NULL,
-    entreprise_id INT NOT NULL,
+    entreprise_id INT,
     mission_id INT NOT NULL,
     tuteur_id INT NOT NULL,
     memoire_id INT,
     CONSTRAINT fk_entreprise_id_apprenti FOREIGN KEY (entreprise_id) REFERENCES entreprise(id),
     CONSTRAINT fk_mission_id_apprenti FOREIGN KEY (mission_id) REFERENCES mission(id),
     CONSTRAINT fk_tuteur_id_apprenti FOREIGN KEY (tuteur_id) REFERENCES tuteur(id),
-    CONSTRAINT fk_memoire_id_apprenti FOREIGN KEY (memoire_id) REFERENCES memoire(id)
+    CONSTRAINT fk_memoire_id_apprenti FOREIGN KEY (memoire_id) REFERENCES memoire(id),
+    CONSTRAINT fk_annee_id_apprenti FOREIGN KEY (annee_academique) REFERENCES annee_academique(id)
 );
 
 CREATE TABLE IF NOT EXISTS visite (
@@ -69,6 +81,11 @@ CREATE TABLE IF NOT EXISTS visite (
     CONSTRAINT fk_apprenti_id_visite FOREIGN KEY (apprenti_id) REFERENCES apprenti(id),
     CONSTRAINT fk_entreprise_id_visite FOREIGN KEY (entreprise_id) REFERENCES entreprise(id)
 );
+
+INSERT INTO niveau (name) VALUES
+                              ('I1'),
+                              ('I2'),
+                              ('I3');
 
 INSERT INTO entreprise (raison_sociale, adresse, infos) VALUES
                                                             ('TechSolutions', '123 Rue de Paris, Paris', 'Entreprise spécialisée en développement logiciel.'),

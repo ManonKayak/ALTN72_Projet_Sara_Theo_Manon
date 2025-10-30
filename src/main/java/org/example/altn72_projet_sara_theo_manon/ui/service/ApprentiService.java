@@ -53,5 +53,34 @@ public class ApprentiService {
         }
         return apprentiToUpdate;
     }
-    
+
+    public List<Apprenti> FilterApprentiByNom(final String nom)
+    {
+        var apprentis = apprentiRepository.findByNom(nom);
+        return apprentis;
+    }
+
+    public List<Apprenti> FilterApprentiByEntreprise_Id(Integer entrepriseId)
+    {
+        var apprentis = apprentiRepository.findByEntreprise_Id(entrepriseId);
+        return apprentis;
+    }
+
+    public List<Apprenti> FilterApprentiByAnneeAcademique(Integer anneeAcademique)
+    {
+        var apprentis = apprentiRepository.findByAnneeAcademique(anneeAcademique);
+        return apprentis;
+    }
+
+    public List<Apprenti> FilterApprentiByMission(List<Integer> missionIds)
+    {
+        var apprentis = apprentiRepository.findByMission_IdIn(missionIds);
+        return apprentis;
+    }
+
+    public void ArchiveApprenti(final int id)
+    {
+        apprentiRepository.updateArchive(id);
+    }
 }
+

@@ -54,4 +54,10 @@ public class EntrepriseService {
         return entrepriseToUpdate;
     }
 
+    public Entreprise getEntrepriseByName(final String name)
+    {
+        Entreprise entreprise = entrepriseRepository.findByRaisonSociale(name);
+        return entreprise;
+    }
+
 }

@@ -54,4 +54,9 @@ public class MissionService {
         return missionToUpdate;
     }
 
+    public List<Mission> getMissionByMotsCles(final String motCle)
+    {
+        return missionRepository.findByMotsCles(motCle);
+    }
+
 }
