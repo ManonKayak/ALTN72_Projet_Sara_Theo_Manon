@@ -1,9 +1,9 @@
 spring:
   datasource:
-    driverClassName: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://host.docker.internal:3306/projectDB
-    username: root
-    password: verysecret
+    driverClassName: ${DATABASE_DRIVER}
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
     initialize: false
     initialSize: 0
     timeBetweenEvictionRunsMillis: 5000
@@ -21,7 +21,7 @@ spring:
           auto: none
         temp:
           use_jdbc_metadata_defaults: false
-        dialect: org.hibernate.dialect.MariaDBDialect
+        dialect: ${DATABASE_DIALECT}
   sql:
     init:
       continue-on-error: true
