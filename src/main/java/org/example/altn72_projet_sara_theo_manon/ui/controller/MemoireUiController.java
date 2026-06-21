@@ -15,6 +15,8 @@ public class MemoireUiController {
 
     private final MemoireService memoireService;
 
+    private final String memoireStr = "memoire";
+
     public MemoireUiController(MemoireService memoireService) {
         this.memoireService = memoireService;
     }
@@ -29,13 +31,13 @@ public class MemoireUiController {
     @GetMapping("/{id}")
     public String showDetailsMemoire(@PathVariable Integer id,  Model model) {
         Optional<Memoire> memoire = memoireService.getMemoireById(id);
-        model.addAttribute("memoire", memoire.orElseThrow(() -> new IllegalStateException("Cet memoire n'existe pas")));
+        model.addAttribute(memoireStr, memoire.orElseThrow(() -> new IllegalStateException("Cet memoire n'existe pas")));
         return "memoire/detail";
     }
 
     @GetMapping("/new")
     public String addNewMemoire(Model model) {
-        model.addAttribute("memoire", new Memoire());
+        model.addAttribute(memoireStr, new Memoire());
         model.addAttribute("id", null);
         model.addAttribute("formAction", "memoires/update");
         return "memoire/form";
@@ -56,7 +58,7 @@ public class MemoireUiController {
     @GetMapping("/{id}/edit")
     public String editMemoire(@PathVariable Integer id,  Model model) {
         Optional<Memoire> memoire = memoireService.getMemoireById(id);
-        model.addAttribute("memoire", memoire.orElse(null));
+        model.addAttribute(memoireStr, memoire.orElse(null));
         model.addAttribute("id", memoire.isPresent() ? id :  null);
         model.addAttribute("formAction", memoire.isPresent() ? "memoires/update/" + id :  "memoires/update");
 

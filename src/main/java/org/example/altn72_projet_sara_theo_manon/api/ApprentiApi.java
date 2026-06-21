@@ -88,6 +88,8 @@ public class ApprentiApi {
     }
 
     private void applyInput(Apprenti a, ApprentiInput in) {
+        final String inexistante = " inexistante";
+
         a.setAnneeAcademique(in.anneeAcademique());
         a.setMajeure(in.majeure());
         a.setNom(in.nom());
@@ -99,9 +101,9 @@ public class ApprentiApi {
         a.setArchive(in.archive());
 
         var e = entrepriseRepo.findById(in.entrepriseId())
-                .orElseThrow(() -> new BadRequestException("Entreprise " + in.entrepriseId() + " inexistante"));
+                .orElseThrow(() -> new BadRequestException("Entreprise " + in.entrepriseId() + inexistante));
         var m = missionRepo.findById(in.missionId())
-                .orElseThrow(() -> new BadRequestException("Mission " + in.missionId() + " inexistante"));
+                .orElseThrow(() -> new BadRequestException("Mission " + in.missionId() + inexistante));
         var t = tuteurRepo.findById(in.tuteurId())
                 .orElseThrow(() -> new BadRequestException("Tuteur " + in.tuteurId() + " inexistant"));
 
@@ -111,7 +113,7 @@ public class ApprentiApi {
 
         if (in.memoireId() != null) {
             var mem = memoireRepo.findById(in.memoireId())
-                    .orElseThrow(() -> new BadRequestException("Mémoire " + in.memoireId() + " inexistante"));
+                    .orElseThrow(() -> new BadRequestException("Mémoire " + in.memoireId() + inexistante));
             a.setMemoire(mem);
         } else {
             a.setMemoire(null);

@@ -1,11 +1,9 @@
 package org.example.altn72_projet_sara_theo_manon.ui.controller;
 
-import jakarta.validation.Valid;
 import org.example.altn72_projet_sara_theo_manon.model.Tuteur;
 import org.example.altn72_projet_sara_theo_manon.ui.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +14,8 @@ import java.util.Optional;
 public class TuteurUiController {
 
     private final TuteurService tuteurService;
+
+    private final String tuteurStr = "tuteur";
 
     public TuteurUiController(TuteurService tuteurService) {
         this.tuteurService = tuteurService;
@@ -31,13 +31,13 @@ public class TuteurUiController {
     @GetMapping("/{id}")
     public String showDetailsTuteur(@PathVariable Integer id,  Model model) {
         Optional<Tuteur> tuteur = tuteurService.getTuteurById(id);
-        model.addAttribute("tuteur", tuteur.orElseThrow(() -> new IllegalStateException("Cet tuteur n'existe pas")));
+        model.addAttribute(tuteurStr, tuteur.orElseThrow(() -> new IllegalStateException("Cet tuteur n'existe pas")));
         return "tuteur/detail";
     }
 
     @GetMapping("/new")
     public String addNewTuteur(Model model) {
-        model.addAttribute("tuteur", new Tuteur());
+        model.addAttribute(tuteurStr, new Tuteur());
         model.addAttribute("id", null);
         model.addAttribute("formAction", "tuteurs/update");
         return "tuteur/form";
@@ -58,7 +58,7 @@ public class TuteurUiController {
     @GetMapping("/{id}/edit")
     public String editTuteur(@PathVariable Integer id,  Model model) {
         Optional<Tuteur> tuteur = tuteurService.getTuteurById(id);
-        model.addAttribute("tuteur", tuteur.orElse(null));
+        model.addAttribute(tuteurStr, tuteur.orElse(null));
         model.addAttribute("id", tuteur.isPresent() ? id :  null);
         model.addAttribute("formAction", tuteur.isPresent() ? "tuteurs/update/" + id :  "tuteurs/update");
 

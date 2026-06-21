@@ -15,6 +15,8 @@ public class MissionUiController {
 
     private final MissionService missionService;
 
+    private final String missionStr = "mission";
+
     public MissionUiController(MissionService missionService) {
         this.missionService = missionService;
     }
@@ -29,13 +31,13 @@ public class MissionUiController {
     @GetMapping("/{id}")
     public String showDetailsMission(@PathVariable Integer id,  Model model) {
         Optional<Mission> mission = missionService.getMissionById(id);
-        model.addAttribute("mission", mission.orElseThrow(() -> new IllegalStateException("Cet mission n'existe pas")));
+        model.addAttribute(missionStr, mission.orElseThrow(() -> new IllegalStateException("Cet mission n'existe pas")));
         return "mission/detail";
     }
 
     @GetMapping("/new")
     public String addNewMission(Model model) {
-        model.addAttribute("mission", new Mission());
+        model.addAttribute(missionStr, new Mission());
         model.addAttribute("id", null);
         model.addAttribute("formAction", "missions/update");
         return "mission/form";
@@ -56,7 +58,7 @@ public class MissionUiController {
     @GetMapping("/{id}/edit")
     public String editMission(@PathVariable Integer id,  Model model) {
         Optional<Mission> mission = missionService.getMissionById(id);
-        model.addAttribute("mission", mission.orElse(null));
+        model.addAttribute(missionStr, mission.orElse(null));
         model.addAttribute("id", mission.isPresent() ? id :  null);
         model.addAttribute("formAction", mission.isPresent() ? "missions/update/" + id : "mission/update");
 

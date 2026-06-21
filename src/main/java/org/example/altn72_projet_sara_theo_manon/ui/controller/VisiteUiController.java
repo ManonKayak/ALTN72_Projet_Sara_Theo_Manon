@@ -15,6 +15,8 @@ public class VisiteUiController {
 
     private final VisiteService visiteService;
 
+    private final String visiteStr = "visite";
+
     public VisiteUiController(VisiteService visiteService) {
         this.visiteService = visiteService;
     }
@@ -29,13 +31,13 @@ public class VisiteUiController {
     @GetMapping("/{id}")
     public String showDetailsVisite(@PathVariable Integer id,  Model model) {
         Optional<Visite> visite = visiteService.getVisiteById(id);
-        model.addAttribute("visite", visite.orElseThrow(() -> new IllegalStateException("Cet visite n'existe pas")));
+        model.addAttribute(visiteStr, visite.orElseThrow(() -> new IllegalStateException("Cet visite n'existe pas")));
         return "visite/detail";
     }
 
     @GetMapping("/new")
     public String addNewVisite(Model model) {
-        model.addAttribute("visite", new Visite());
+        model.addAttribute(visiteStr, new Visite());
         model.addAttribute("id", null);
         model.addAttribute("formAction", "visites/update");
 
@@ -57,7 +59,7 @@ public class VisiteUiController {
     @GetMapping("/{id}/edit")
     public String editVisite(@PathVariable Integer id,  Model model) {
         Optional<Visite> visite = visiteService.getVisiteById(id);
-        model.addAttribute("visite", visite.orElse(null));
+        model.addAttribute(visiteStr, visite.orElse(null));
         model.addAttribute("id", visite.isPresent() ? id :  null);
         model.addAttribute("formAction", visite.isPresent() ? "visites/update/" + id :  "visites/update");
 

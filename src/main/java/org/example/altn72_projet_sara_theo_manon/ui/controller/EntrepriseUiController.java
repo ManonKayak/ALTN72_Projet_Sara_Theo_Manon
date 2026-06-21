@@ -15,6 +15,8 @@ public class EntrepriseUiController {
 
     private final EntrepriseService entrepriseService;
 
+    private final String entrepriseStr = "entreprise";
+
     public EntrepriseUiController(EntrepriseService entrepriseService) {
         this.entrepriseService = entrepriseService;
     }
@@ -29,13 +31,13 @@ public class EntrepriseUiController {
     @GetMapping("/{id}")
     public String showDetailsEntreprise(@PathVariable Integer id,  Model model) {
         Optional<Entreprise> entreprise = entrepriseService.getEntrepriseById(id);
-        model.addAttribute("entreprise", entreprise.orElseThrow(() -> new IllegalStateException("Cet entreprise n'existe pas")));
+        model.addAttribute(entrepriseStr, entreprise.orElseThrow(() -> new IllegalStateException("Cet entreprise n'existe pas")));
         return "entreprise/detail";
     }
 
     @GetMapping("/new")
     public String addNewEntreprise(Model model) {
-        model.addAttribute("entreprise", new Entreprise());
+        model.addAttribute(entrepriseStr, new Entreprise());
         model.addAttribute("id", null);
         model.addAttribute("formAction", "entreprises/update");
         return "entreprise/form";
@@ -56,7 +58,7 @@ public class EntrepriseUiController {
     @GetMapping("/{id}/edit")
     public String editEntreprise(@PathVariable Integer id,  Model model) {
         Optional<Entreprise> entreprise = entrepriseService.getEntrepriseById(id);
-        model.addAttribute("entreprise", entreprise.orElse(null));
+        model.addAttribute(entrepriseStr, entreprise.orElse(null));
         model.addAttribute("id", entreprise.isPresent() ? id :  null);
         model.addAttribute("formAction", entreprise.isPresent() ? "entreprises/update/" + id :  "entreprises/update");
 

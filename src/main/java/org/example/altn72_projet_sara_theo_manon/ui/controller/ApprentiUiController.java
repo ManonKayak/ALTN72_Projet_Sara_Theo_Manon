@@ -22,6 +22,8 @@ public class ApprentiUiController {
     private final TuteurService tuteurService;
     private final MemoireService memoireService;
 
+    private final String apprentiStr = "apprenti";
+
     public ApprentiUiController(ApprentiService apprentiService, EntrepriseService entrepriseService, MissionService missionService,
                                 TuteurService tuteurService, MemoireService memoireService) {
         this.apprentiService = apprentiService;
@@ -42,13 +44,13 @@ public class ApprentiUiController {
     @GetMapping("/{id}")
     public String showDetailsApprenti(@PathVariable Integer id,  Model model) {
         Optional<Apprenti> apprenti = apprentiService.getApprentiById(id);
-        model.addAttribute("apprenti", apprenti.orElseThrow(() -> new IllegalStateException("Cet apprenti n'existe pas")));
+        model.addAttribute(apprentiStr, apprenti.orElseThrow(() -> new IllegalStateException("Cet apprenti n'existe pas")));
         return "apprenti/detail";
     }
 
     @GetMapping("/new")
     public String addNewApprenti(Model model) {
-        model.addAttribute("apprenti", new Apprenti());
+        model.addAttribute(apprentiStr, new Apprenti());
         model.addAttribute("id", null);
         model.addAttribute("formAction", "/apprentis/update");
         return "apprenti/form";
@@ -69,7 +71,7 @@ public class ApprentiUiController {
     @GetMapping("/{id}/edit")
     public String editApprenti(@PathVariable Integer id,  Model model) {
         Optional<Apprenti> apprenti = apprentiService.getApprentiById(id);
-        model.addAttribute("apprenti", apprenti.orElse(null));
+        model.addAttribute(apprentiStr, apprenti.orElse(null));
         model.addAttribute("id", apprenti.isPresent() ? id :  null);
         model.addAttribute("formAction", apprenti.isPresent() ? "/apprentis/update/" + id :  "/apprentis/update");
 
@@ -120,6 +122,8 @@ public class ApprentiUiController {
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
+                break;
+            default:
                 break;
         }
 
