@@ -1,5 +1,7 @@
 package org.example.altn72_projet_sara_theo_manon.errors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,10 +24,11 @@ import java.util.Map;
 @RestControllerAdvice(basePackages = "org.example.altn72_projet_sara_theo_manon.api")
 public class GlobalRestExceptionHandler {
 
-    private ProblemDetail problem(HttpStatus status, String title, String detail, String type) {
+    private static final Logger log = LoggerFactory.getLogger(GlobalRestExceptionHandler.class);
+
+    private ProblemDetail problem(HttpStatus status, String title, String detail) {
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(status, detail);
         pd.setTitle(title);
-        if (type != null) pd.setType(URI.create(type));
         pd.setProperty("timestamp", OffsetDateTime.now());
         pd.setProperty("service", "altn72-backend");
         return pd;
@@ -34,27 +36,27 @@ public class GlobalRestExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ProblemDetail> handleNotFound(NotFoundException ex) {
-        var pd = problem(HttpStatus.NOT_FOUND, "Ressource introuvable", ex.getMessage(), null);
+        var pd = problem(HttpStatus.NOT_FOUND, "Ressource introuvable", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(pd);
     }
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ProblemDetail> handleBadRequest(BadRequestException ex) {
-        var pd = problem(HttpStatus.BAD_REQUEST, "Requête invalide", ex.getMessage(), null);
+        var pd = problem(HttpStatus.BAD_REQUEST, "Requête invalide", ex.getMessage());
         return ResponseEntity.badRequest().body(pd);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ProblemDetail> handleBadJson(HttpMessageNotReadableException ex) {
+    public ResponseEntity<ProblemDetail> handleBadJson() {
         var pd = problem(HttpStatus.BAD_REQUEST, "Corps JSON illisible",
-                "Le JSON est mal formé ou incompatible avec le modèle.", null);
+                "Le JSON est mal formé ou incompatible avec le modèle.");
         return ResponseEntity.badRequest().body(pd);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<ProblemDetail> handleMissingParam(MissingServletRequestParameterException ex) {
         var pd = problem(HttpStatus.BAD_REQUEST, "Paramètre manquant",
-                "Paramètre requis manquant : " + ex.getParameterName(), null);
+                "Paramètre requis manquant : " + ex.getParameterName());
         return ResponseEntity.badRequest().body(pd);
     }
 
@@ -62,21 +64,21 @@ public class GlobalRestExceptionHandler {
     public ResponseEntity<ProblemDetail> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
         var pd = problem(HttpStatus.BAD_REQUEST, "Type de paramètre invalide",
                 "Paramètre '" + ex.getName() + "' de type attendu " +
-                        (ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "?"), null);
+                        (ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "?"));
         return ResponseEntity.badRequest().body(pd);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ProblemDetail> handleIntegrity(DataIntegrityViolationException ex) {
+    public ResponseEntity<ProblemDetail> handleIntegrity() {
         var pd = problem(HttpStatus.CONFLICT, "Contrainte d’intégrité violée",
-                "La requête viole une contrainte de base de données (clé étrangère, unicité, etc.).", null);
+                "La requête viole une contrainte de base de données (clé étrangère, unicité, etc.).");
         return ResponseEntity.status(HttpStatus.CONFLICT).body(pd);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ProblemDetail> handleAccessDenied(AccessDeniedException ex) {
+    public ResponseEntity<ProblemDetail> handleAccessDenied() {
         var pd = problem(HttpStatus.FORBIDDEN, "Accès refusé",
-                "Vous n’avez pas les droits suffisants pour cette ressource.", null);
+                "Vous n’avez pas les droits suffisants pour cette ressource.");
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(pd);
     }
 
@@ -88,7 +90,7 @@ public class GlobalRestExceptionHandler {
             fieldErrors.put(field, error.getDefaultMessage());
         }
         var pd = problem(HttpStatus.BAD_REQUEST, "Validation échouée",
-                "Certaines propriétés ne respectent pas les contraintes.", null);
+                "Certaines propriétés ne respectent pas les contraintes.");
         pd.setProperty("errors", fieldErrors);
         return ResponseEntity.badRequest().body(pd);
     }
@@ -103,8 +105,9 @@ public class GlobalRestExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ProblemDetail> handleUnknown(Exception ex) {
+        log.error("Unhandled exception", ex);
         var pd = problem(HttpStatus.INTERNAL_SERVER_ERROR, "Erreur interne",
-                "Une erreur inattendue est survenue. Réessayez plus tard.", null);
+                "Une erreur inattendue est survenue. Réessayez plus tard.");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(pd);
     }
 }
