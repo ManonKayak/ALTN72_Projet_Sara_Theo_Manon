@@ -1,12 +1,11 @@
-FROM maven:latest AS build
-RUN mkdir /app
+FROM maven:3.9-eclipse-temurin-17 AS build
 WORKDIR /app
 COPY . /app
 RUN mvn clean package -DskipTests
 
-FROM openjdk:latest
+FROM eclipse-temurin:17-jre
 RUN mkdir /app
 COPY --from=build /app/target/*.jar /app/*.jar
-copy --from=build /app/.env /app
+COPY --from=build /app/.env /app
 WORKDIR /app
-CMD "java" "-jar" "*.jar"
+CMD ["java", "-jar", "*.jar"]
