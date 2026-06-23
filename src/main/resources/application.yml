@@ -25,3 +25,7 @@ spring:
   sql:
     init:
       continue-on-error: true
+
+app:
+  user:
+    password: ${USER_PASSWORD:password}
