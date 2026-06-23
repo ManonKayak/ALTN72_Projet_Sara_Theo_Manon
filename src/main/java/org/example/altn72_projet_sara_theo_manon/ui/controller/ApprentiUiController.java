@@ -120,7 +120,7 @@ public class ApprentiUiController {
                     int annee = Integer.parseInt(valeur);
                     list = apprentiService.FilterApprentiByAnneeAcademique(annee);
                 } catch (NumberFormatException e) {
-                    e.printStackTrace();
+                    // Valeur d'année non numérique : aucune recherche effectuée pour ce critère
                 }
                 break;
             default:
