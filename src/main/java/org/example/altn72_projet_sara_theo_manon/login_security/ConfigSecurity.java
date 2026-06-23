@@ -19,7 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class ConfigSecurity {
 
-    @Value("${app.user.password}")
+    @Value("${app.user.password:password}")
     private String userPassword;
 
     @Bean
