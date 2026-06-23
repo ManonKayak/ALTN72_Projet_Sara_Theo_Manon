@@ -72,7 +72,7 @@ class EntrepriseUiControllerTest {
     @Test
     void create_redirectsToDetail() {
         when(entrepriseService.addEntreprise(any())).thenReturn(entreprise);
-        String view = controller.createEntreprise(entreprise);
+        String view = controller.createEntreprise(new EntrepriseUiController.EntrepriseFormDto());
         assertEquals("redirect:/entreprises/1", view);
     }
 
@@ -89,13 +89,13 @@ class EntrepriseUiControllerTest {
         Model model = new ExtendedModelMap();
         String view = controller.editEntreprise(1, model);
         assertEquals("entreprise/form", view);
-        assertEquals(entreprise, model.asMap().get("entreprise"));
+        assertNotNull(model.asMap().get("entreprise"));
     }
 
     @Test
     void update_redirectsToDetail() {
         when(entrepriseService.updateEntreprise(eq(1), any())).thenReturn(entreprise);
-        String view = controller.updateEntreprise(1, entreprise);
+        String view = controller.updateEntreprise(1, new EntrepriseUiController.EntrepriseFormDto());
         assertEquals("redirect:/entreprises/1", view);
     }
 }

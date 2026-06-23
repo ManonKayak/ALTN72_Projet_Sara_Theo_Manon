@@ -14,11 +14,54 @@ import java.util.Optional;
 public class TuteurUiController {
 
     private final TuteurService tuteurService;
-
     private final String tuteurStr = "tuteur";
 
     public TuteurUiController(TuteurService tuteurService) {
         this.tuteurService = tuteurService;
+    }
+
+    public static class TuteurFormDto {
+        private String poste;
+        private String nom;
+        private String prenom;
+        private String email;
+        private String telephone;
+        private String remarques;
+
+        public String getPoste() { return poste; }
+        public void setPoste(String poste) { this.poste = poste; }
+        public String getNom() { return nom; }
+        public void setNom(String nom) { this.nom = nom; }
+        public String getPrenom() { return prenom; }
+        public void setPrenom(String prenom) { this.prenom = prenom; }
+        public String getEmail() { return email; }
+        public void setEmail(String email) { this.email = email; }
+        public String getTelephone() { return telephone; }
+        public void setTelephone(String telephone) { this.telephone = telephone; }
+        public String getRemarques() { return remarques; }
+        public void setRemarques(String remarques) { this.remarques = remarques; }
+    }
+
+    private static TuteurFormDto fromEntity(Tuteur t) {
+        TuteurFormDto dto = new TuteurFormDto();
+        dto.setPoste(t.getPoste());
+        dto.setNom(t.getNom());
+        dto.setPrenom(t.getPrenom());
+        dto.setEmail(t.getEmail());
+        dto.setTelephone(t.getTelephone());
+        dto.setRemarques(t.getRemarques());
+        return dto;
+    }
+
+    private static Tuteur toEntity(TuteurFormDto dto) {
+        Tuteur t = new Tuteur();
+        t.setPoste(dto.getPoste());
+        t.setNom(dto.getNom());
+        t.setPrenom(dto.getPrenom());
+        t.setEmail(dto.getEmail());
+        t.setTelephone(dto.getTelephone());
+        t.setRemarques(dto.getRemarques());
+        return t;
     }
 
     @GetMapping
@@ -29,7 +72,7 @@ public class TuteurUiController {
     }
 
     @GetMapping("/{id}")
-    public String showDetailsTuteur(@PathVariable Integer id,  Model model) {
+    public String showDetailsTuteur(@PathVariable Integer id, Model model) {
         Optional<Tuteur> tuteur = tuteurService.getTuteurById(id);
         model.addAttribute(tuteurStr, tuteur.orElseThrow(() -> new IllegalStateException("Cet tuteur n'existe pas")));
         return "tuteur/detail";
@@ -37,16 +80,16 @@ public class TuteurUiController {
 
     @GetMapping("/new")
     public String addNewTuteur(Model model) {
-        model.addAttribute(tuteurStr, new Tuteur());
+        model.addAttribute(tuteurStr, new TuteurFormDto());
         model.addAttribute("id", null);
         model.addAttribute("formAction", "tuteurs/update");
         return "tuteur/form";
     }
 
     @PostMapping("/update")
-    public String createTuteur(@ModelAttribute Tuteur tuteur) {
-        tuteurService.addTuteur(tuteur);
-        return "redirect:/tuteurs/"+tuteur.getId();
+    public String createTuteur(@ModelAttribute TuteurFormDto dto) {
+        Tuteur saved = tuteurService.addTuteur(toEntity(dto));
+        return "redirect:/tuteurs/" + saved.getId();
     }
 
     @PostMapping("{id}/delete")
@@ -56,18 +99,17 @@ public class TuteurUiController {
     }
 
     @GetMapping("/{id}/edit")
-    public String editTuteur(@PathVariable Integer id,  Model model) {
+    public String editTuteur(@PathVariable Integer id, Model model) {
         Optional<Tuteur> tuteur = tuteurService.getTuteurById(id);
-        model.addAttribute(tuteurStr, tuteur.orElse(null));
-        model.addAttribute("id", tuteur.isPresent() ? id :  null);
-        model.addAttribute("formAction", tuteur.isPresent() ? "tuteurs/update/" + id :  "tuteurs/update");
-
+        model.addAttribute(tuteurStr, tuteur.map(TuteurUiController::fromEntity).orElse(null));
+        model.addAttribute("id", tuteur.isPresent() ? id : null);
+        model.addAttribute("formAction", tuteur.isPresent() ? "tuteurs/update/" + id : "tuteurs/update");
         return "tuteur/form";
     }
 
     @PostMapping("/update/{id}")
-    public String updateTuteur(@PathVariable Integer id, @ModelAttribute Tuteur tuteur) {
-        tuteurService.updateTuteur(id, tuteur);
-        return "redirect:/tuteurs/"+id;
+    public String updateTuteur(@PathVariable Integer id, @ModelAttribute TuteurFormDto dto) {
+        tuteurService.updateTuteur(id, toEntity(dto));
+        return "redirect:/tuteurs/" + id;
     }
 }

@@ -14,11 +14,39 @@ import java.util.Optional;
 public class MissionUiController {
 
     private final MissionService missionService;
-
     private final String missionStr = "mission";
 
     public MissionUiController(MissionService missionService) {
         this.missionService = missionService;
+    }
+
+    public static class MissionFormDto {
+        private String motsCles;
+        private String metierCible;
+        private String commentaires;
+
+        public String getMotsCles() { return motsCles; }
+        public void setMotsCles(String motsCles) { this.motsCles = motsCles; }
+        public String getMetierCible() { return metierCible; }
+        public void setMetierCible(String metierCible) { this.metierCible = metierCible; }
+        public String getCommentaires() { return commentaires; }
+        public void setCommentaires(String commentaires) { this.commentaires = commentaires; }
+    }
+
+    private static MissionFormDto fromEntity(Mission m) {
+        MissionFormDto dto = new MissionFormDto();
+        dto.setMotsCles(m.getMotsCles());
+        dto.setMetierCible(m.getMetierCible());
+        dto.setCommentaires(m.getCommentaires());
+        return dto;
+    }
+
+    private static Mission toEntity(MissionFormDto dto) {
+        Mission m = new Mission();
+        m.setMotsCles(dto.getMotsCles());
+        m.setMetierCible(dto.getMetierCible());
+        m.setCommentaires(dto.getCommentaires());
+        return m;
     }
 
     @GetMapping
@@ -29,7 +57,7 @@ public class MissionUiController {
     }
 
     @GetMapping("/{id}")
-    public String showDetailsMission(@PathVariable Integer id,  Model model) {
+    public String showDetailsMission(@PathVariable Integer id, Model model) {
         Optional<Mission> mission = missionService.getMissionById(id);
         model.addAttribute(missionStr, mission.orElseThrow(() -> new IllegalStateException("Cet mission n'existe pas")));
         return "mission/detail";
@@ -37,16 +65,16 @@ public class MissionUiController {
 
     @GetMapping("/new")
     public String addNewMission(Model model) {
-        model.addAttribute(missionStr, new Mission());
+        model.addAttribute(missionStr, new MissionFormDto());
         model.addAttribute("id", null);
         model.addAttribute("formAction", "missions/update");
         return "mission/form";
     }
 
     @PostMapping("/update")
-    public String createMission(@ModelAttribute Mission mission) {
-        missionService.addMission(mission);
-        return "redirect:/missions/"+mission.getId();
+    public String createMission(@ModelAttribute MissionFormDto dto) {
+        Mission saved = missionService.addMission(toEntity(dto));
+        return "redirect:/missions/" + saved.getId();
     }
 
     @PostMapping("{id}/delete")
@@ -56,18 +84,17 @@ public class MissionUiController {
     }
 
     @GetMapping("/{id}/edit")
-    public String editMission(@PathVariable Integer id,  Model model) {
+    public String editMission(@PathVariable Integer id, Model model) {
         Optional<Mission> mission = missionService.getMissionById(id);
-        model.addAttribute(missionStr, mission.orElse(null));
-        model.addAttribute("id", mission.isPresent() ? id :  null);
+        model.addAttribute(missionStr, mission.map(MissionUiController::fromEntity).orElse(null));
+        model.addAttribute("id", mission.isPresent() ? id : null);
         model.addAttribute("formAction", mission.isPresent() ? "missions/update/" + id : "mission/update");
-
         return "mission/form";
     }
 
     @PostMapping("/update/{id}")
-    public String updateMission(@PathVariable Integer id, @ModelAttribute Mission mission) {
-        missionService.updateMission(id, mission);
-        return "redirect:/missions/"+id;
+    public String updateMission(@PathVariable Integer id, @ModelAttribute MissionFormDto dto) {
+        missionService.updateMission(id, toEntity(dto));
+        return "redirect:/missions/" + id;
     }
 }

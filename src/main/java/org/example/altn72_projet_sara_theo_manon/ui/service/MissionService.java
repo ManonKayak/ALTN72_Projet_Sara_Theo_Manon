@@ -26,7 +26,7 @@ public class MissionService {
 
     public Optional<Mission> getMissionById(final int id)
     {
-        return this.missionRepository.findById(id); //.orElseThrow(() -> new IllegalStateException("Cet mission n'existe pas"));
+        return this.missionRepository.findById(id);
     }
 
     @Transactional

@@ -83,7 +83,7 @@ class ApprentiUiControllerTest {
     @Test
     void create_redirectsToDetail() {
         when(apprentiService.addApprenti(any())).thenReturn(apprenti);
-        String view = controller.createApprenti(apprenti);
+        String view = controller.createApprenti(new ApprentiUiController.ApprentiFormDto());
         assertEquals("redirect:/apprentis/1", view);
     }
 
@@ -112,7 +112,7 @@ class ApprentiUiControllerTest {
     void update_redirectsToList() {
         when(apprentiService.updateApprenti(eq(1), any())).thenReturn(true);
         Model model = new ExtendedModelMap();
-        String view = controller.updateApprenti(1, apprenti, model);
+        String view = controller.updateApprenti(1, new ApprentiUiController.ApprentiFormDto(), model);
         assertEquals("redirect:/apprentis", view);
     }
 

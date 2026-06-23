@@ -31,7 +31,7 @@ public class ApprentiService {
     
     public Optional<Apprenti> getApprentiById(final int id)
     {
-        return this.apprentiRepository.findById(id); //.orElseThrow(() -> new IllegalStateException("Cet apprenti n'existe pas"));
+        return this.apprentiRepository.findById(id);
     }
     
     @Transactional
@@ -68,26 +68,22 @@ public class ApprentiService {
 
     public List<Apprenti> FilterApprentiByNom(final String nom)
     {
-        var apprentis = apprentiRepository.findByNom(nom);
-        return apprentis;
+        return apprentiRepository.findByNom(nom);
     }
 
     public List<Apprenti> FilterApprentiByEntreprise_Id(Integer entrepriseId)
     {
-        var apprentis = apprentiRepository.findByEntreprise_Id(entrepriseId);
-        return apprentis;
+        return apprentiRepository.findByEntreprise_Id(entrepriseId);
     }
 
     public List<Apprenti> FilterApprentiByAnneeAcademique(Integer anneeAcademique)
     {
-        var apprentis = apprentiRepository.findByAnneeAcademique(anneeAcademique);
-        return apprentis;
+        return apprentiRepository.findByAnneeAcademique(anneeAcademique);
     }
 
     public List<Apprenti> FilterApprentiByMission(List<Integer> missionIds)
     {
-        var apprentis = apprentiRepository.findByMission_IdIn(missionIds);
-        return apprentis;
+        return apprentiRepository.findByMission_IdIn(missionIds);
     }
 
     public void ArchiveApprenti(final int id)

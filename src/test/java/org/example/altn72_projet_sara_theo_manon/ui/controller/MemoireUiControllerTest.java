@@ -72,7 +72,7 @@ class MemoireUiControllerTest {
     @Test
     void create_redirectsToDetail() {
         when(memoireService.addMemoire(any())).thenReturn(memoire);
-        String view = controller.createMemoire(memoire);
+        String view = controller.createMemoire(new MemoireUiController.MemoireFormDto());
         assertEquals("redirect:/memoires/1", view);
     }
 
@@ -94,7 +94,7 @@ class MemoireUiControllerTest {
     @Test
     void update_redirectsToDetail() {
         when(memoireService.updateMemoire(eq(1), any())).thenReturn(memoire);
-        String view = controller.updateMemoire(1, memoire);
+        String view = controller.updateMemoire(1, new MemoireUiController.MemoireFormDto());
         assertEquals("redirect:/memoires/1", view);
     }
 }

@@ -9,8 +9,6 @@ import java.io.IOException;
 
 public class CustomAuthHandler implements AuthenticationFailureHandler {
 
-    public CustomAuthHandler() {}
-
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) {
         try {

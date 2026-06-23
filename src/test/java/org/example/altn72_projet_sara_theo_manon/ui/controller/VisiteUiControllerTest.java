@@ -73,7 +73,7 @@ class VisiteUiControllerTest {
     @Test
     void create_redirectsToDetail() {
         when(visiteService.addVisite(any())).thenReturn(visite);
-        String view = controller.createVisite(visite);
+        String view = controller.createVisite(new VisiteUiController.VisiteFormDto());
         assertEquals("redirect:/visites/1", view);
     }
 
@@ -95,7 +95,7 @@ class VisiteUiControllerTest {
     @Test
     void update_redirectsToDetail() {
         when(visiteService.updateVisite(eq(1), any())).thenReturn(visite);
-        String view = controller.updateVisite(1, visite);
+        String view = controller.updateVisite(1, new VisiteUiController.VisiteFormDto());
         assertEquals("redirect:/visites/1", view);
     }
 }
