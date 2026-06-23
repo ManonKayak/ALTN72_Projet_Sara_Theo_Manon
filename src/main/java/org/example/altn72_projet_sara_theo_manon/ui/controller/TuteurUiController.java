@@ -1,5 +1,6 @@
 package org.example.altn72_projet_sara_theo_manon.ui.controller;
 
+import lombok.Data;
 import org.example.altn72_projet_sara_theo_manon.model.Tuteur;
 import org.example.altn72_projet_sara_theo_manon.ui.service.*;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ public class TuteurUiController {
         this.tuteurService = tuteurService;
     }
 
+    @Data
     public static class TuteurFormDto {
         private String poste;
         private String nom;
@@ -27,19 +29,6 @@ public class TuteurUiController {
         private String email;
         private String telephone;
         private String remarques;
-
-        public String getPoste() { return poste; }
-        public void setPoste(String poste) { this.poste = poste; }
-        public String getNom() { return nom; }
-        public void setNom(String nom) { this.nom = nom; }
-        public String getPrenom() { return prenom; }
-        public void setPrenom(String prenom) { this.prenom = prenom; }
-        public String getEmail() { return email; }
-        public void setEmail(String email) { this.email = email; }
-        public String getTelephone() { return telephone; }
-        public void setTelephone(String telephone) { this.telephone = telephone; }
-        public String getRemarques() { return remarques; }
-        public void setRemarques(String remarques) { this.remarques = remarques; }
     }
 
     private static TuteurFormDto fromEntity(Tuteur t) {

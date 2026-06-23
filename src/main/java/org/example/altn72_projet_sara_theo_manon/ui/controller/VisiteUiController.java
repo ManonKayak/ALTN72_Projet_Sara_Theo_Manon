@@ -1,5 +1,6 @@
 package org.example.altn72_projet_sara_theo_manon.ui.controller;
 
+import lombok.Data;
 import org.example.altn72_projet_sara_theo_manon.model.Visite;
 import org.example.altn72_projet_sara_theo_manon.ui.service.*;
 import org.springframework.stereotype.Controller;
@@ -20,17 +21,11 @@ public class VisiteUiController {
         this.visiteService = visiteService;
     }
 
+    @Data
     public static class VisiteFormDto {
         private Integer date;
         private Integer format;
         private String commentaire;
-
-        public Integer getDate() { return date; }
-        public void setDate(Integer date) { this.date = date; }
-        public Integer getFormat() { return format; }
-        public void setFormat(Integer format) { this.format = format; }
-        public String getCommentaire() { return commentaire; }
-        public void setCommentaire(String commentaire) { this.commentaire = commentaire; }
     }
 
     private static VisiteFormDto fromEntity(Visite v) {

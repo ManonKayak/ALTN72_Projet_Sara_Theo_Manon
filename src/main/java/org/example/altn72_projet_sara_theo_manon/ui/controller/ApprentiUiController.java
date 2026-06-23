@@ -1,5 +1,6 @@
 package org.example.altn72_projet_sara_theo_manon.ui.controller;
 
+import lombok.Data;
 import org.example.altn72_projet_sara_theo_manon.model.Apprenti;
 import org.example.altn72_projet_sara_theo_manon.model.Mission;
 import org.example.altn72_projet_sara_theo_manon.ui.service.*;
@@ -32,6 +33,7 @@ public class ApprentiUiController {
         this.memoireService = memoireService;
     }
 
+    @Data
     public static class ApprentiFormDto {
         private Integer anneeAcademique;
         private Integer majeure;
@@ -46,33 +48,6 @@ public class ApprentiUiController {
         private Integer missionId;
         private Integer tuteurId;
         private Integer memoireId;
-
-        public Integer getAnneeAcademique() { return anneeAcademique; }
-        public void setAnneeAcademique(Integer anneeAcademique) { this.anneeAcademique = anneeAcademique; }
-        public Integer getMajeure() { return majeure; }
-        public void setMajeure(Integer majeure) { this.majeure = majeure; }
-        public String getNom() { return nom; }
-        public void setNom(String nom) { this.nom = nom; }
-        public String getPrenom() { return prenom; }
-        public void setPrenom(String prenom) { this.prenom = prenom; }
-        public String getMail() { return mail; }
-        public void setMail(String mail) { this.mail = mail; }
-        public String getTelephone() { return telephone; }
-        public void setTelephone(String telephone) { this.telephone = telephone; }
-        public String getRemarques() { return remarques; }
-        public void setRemarques(String remarques) { this.remarques = remarques; }
-        public Integer getNiveau() { return niveau; }
-        public void setNiveau(Integer niveau) { this.niveau = niveau; }
-        public Boolean getArchive() { return archive; }
-        public void setArchive(Boolean archive) { this.archive = archive; }
-        public Integer getEntrepriseId() { return entrepriseId; }
-        public void setEntrepriseId(Integer entrepriseId) { this.entrepriseId = entrepriseId; }
-        public Integer getMissionId() { return missionId; }
-        public void setMissionId(Integer missionId) { this.missionId = missionId; }
-        public Integer getTuteurId() { return tuteurId; }
-        public void setTuteurId(Integer tuteurId) { this.tuteurId = tuteurId; }
-        public Integer getMemoireId() { return memoireId; }
-        public void setMemoireId(Integer memoireId) { this.memoireId = memoireId; }
     }
 
     private static ApprentiFormDto fromEntity(Apprenti a) {

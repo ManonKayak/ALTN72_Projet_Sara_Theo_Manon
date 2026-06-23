@@ -1,5 +1,6 @@
 package org.example.altn72_projet_sara_theo_manon.ui.controller;
 
+import lombok.Data;
 import org.example.altn72_projet_sara_theo_manon.model.Memoire;
 import org.example.altn72_projet_sara_theo_manon.ui.service.*;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ public class MemoireUiController {
         this.memoireService = memoireService;
     }
 
+    @Data
     public static class MemoireFormDto {
         private String sujet;
         private Float note;
@@ -27,19 +29,6 @@ public class MemoireUiController {
         private Integer dateSoutenance;
         private Float noteSoutenance;
         private String commentaireSoutenance;
-
-        public String getSujet() { return sujet; }
-        public void setSujet(String sujet) { this.sujet = sujet; }
-        public Float getNote() { return note; }
-        public void setNote(Float note) { this.note = note; }
-        public String getCommentaire() { return commentaire; }
-        public void setCommentaire(String commentaire) { this.commentaire = commentaire; }
-        public Integer getDateSoutenance() { return dateSoutenance; }
-        public void setDateSoutenance(Integer dateSoutenance) { this.dateSoutenance = dateSoutenance; }
-        public Float getNoteSoutenance() { return noteSoutenance; }
-        public void setNoteSoutenance(Float noteSoutenance) { this.noteSoutenance = noteSoutenance; }
-        public String getCommentaireSoutenance() { return commentaireSoutenance; }
-        public void setCommentaireSoutenance(String commentaireSoutenance) { this.commentaireSoutenance = commentaireSoutenance; }
     }
 
     private static MemoireFormDto fromEntity(Memoire m) {

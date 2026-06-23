@@ -1,5 +1,6 @@
 package org.example.altn72_projet_sara_theo_manon.ui.controller;
 
+import lombok.Data;
 import org.example.altn72_projet_sara_theo_manon.model.Mission;
 import org.example.altn72_projet_sara_theo_manon.ui.service.*;
 import org.springframework.stereotype.Controller;
@@ -20,17 +21,11 @@ public class MissionUiController {
         this.missionService = missionService;
     }
 
+    @Data
     public static class MissionFormDto {
         private String motsCles;
         private String metierCible;
         private String commentaires;
-
-        public String getMotsCles() { return motsCles; }
-        public void setMotsCles(String motsCles) { this.motsCles = motsCles; }
-        public String getMetierCible() { return metierCible; }
-        public void setMetierCible(String metierCible) { this.metierCible = metierCible; }
-        public String getCommentaires() { return commentaires; }
-        public void setCommentaires(String commentaires) { this.commentaires = commentaires; }
     }
 
     private static MissionFormDto fromEntity(Mission m) {

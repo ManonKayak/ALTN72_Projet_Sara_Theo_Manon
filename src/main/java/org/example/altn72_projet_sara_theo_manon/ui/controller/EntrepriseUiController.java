@@ -1,5 +1,6 @@
 package org.example.altn72_projet_sara_theo_manon.ui.controller;
 
+import lombok.Data;
 import org.example.altn72_projet_sara_theo_manon.model.Entreprise;
 import org.example.altn72_projet_sara_theo_manon.ui.service.EntrepriseService;
 import org.springframework.stereotype.Controller;
@@ -20,17 +21,11 @@ public class EntrepriseUiController {
         this.entrepriseService = entrepriseService;
     }
 
+    @Data
     public static class EntrepriseFormDto {
         private String raisonSociale;
         private String adresse;
         private String infos;
-
-        public String getRaisonSociale() { return raisonSociale; }
-        public void setRaisonSociale(String raisonSociale) { this.raisonSociale = raisonSociale; }
-        public String getAdresse() { return adresse; }
-        public void setAdresse(String adresse) { this.adresse = adresse; }
-        public String getInfos() { return infos; }
-        public void setInfos(String infos) { this.infos = infos; }
     }
 
     private static EntrepriseFormDto fromEntity(Entreprise e) {
