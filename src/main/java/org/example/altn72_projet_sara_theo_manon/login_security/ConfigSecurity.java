@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @PropertySource("classpath:application.yml")
@@ -40,8 +42,13 @@ public class ConfigSecurity {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        var user = User.withUsername("pierre.martin@techsolutions.com").password("{noop}password").build();
+        var user = User.withUsername("pierre.martin@techsolutions.com").password(passwordEncoder().encode("password")).build();
         return new InMemoryUserDetailsManager(user);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 }
