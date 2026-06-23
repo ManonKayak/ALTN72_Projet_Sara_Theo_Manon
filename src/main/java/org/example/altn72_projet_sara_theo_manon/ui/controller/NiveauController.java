@@ -1,8 +1,7 @@
 package org.example.altn72_projet_sara_theo_manon.ui.controller;
 
-import ch.qos.logback.core.model.Model;
-import org.example.altn72_projet_sara_theo_manon.model.NiveauRepository;
 import org.example.altn72_projet_sara_theo_manon.ui.service.NiveauService;
+import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +18,7 @@ public class NiveauController {
     @GetMapping("/all")
     public String niveau(Model model){
         var niveaux = niveauService.GetNiveaux();
-        return "niveau";
+        model.addAttribute("niveaux", niveaux);
+        return "niveau/list";
     }
 }

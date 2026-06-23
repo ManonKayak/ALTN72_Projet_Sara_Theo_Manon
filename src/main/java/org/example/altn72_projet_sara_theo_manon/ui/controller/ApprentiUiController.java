@@ -1,5 +1,6 @@
 package org.example.altn72_projet_sara_theo_manon.ui.controller;
 
+import lombok.Data;
 import org.example.altn72_projet_sara_theo_manon.model.Apprenti;
 import org.example.altn72_projet_sara_theo_manon.model.Mission;
 import org.example.altn72_projet_sara_theo_manon.ui.service.*;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/apprentis")
@@ -33,6 +33,67 @@ public class ApprentiUiController {
         this.memoireService = memoireService;
     }
 
+    @Data
+    public static class ApprentiFormDto {
+        private Integer anneeAcademique;
+        private Integer majeure;
+        private String nom;
+        private String prenom;
+        private String mail;
+        private String telephone;
+        private String remarques;
+        private Integer niveau;
+        private Boolean archive;
+        private Integer entrepriseId;
+        private Integer missionId;
+        private Integer tuteurId;
+        private Integer memoireId;
+    }
+
+    private static ApprentiFormDto fromEntity(Apprenti a) {
+        ApprentiFormDto dto = new ApprentiFormDto();
+        dto.setAnneeAcademique(a.getAnneeAcademique());
+        dto.setMajeure(a.getMajeure());
+        dto.setNom(a.getNom());
+        dto.setPrenom(a.getPrenom());
+        dto.setMail(a.getMail());
+        dto.setTelephone(a.getTelephone());
+        dto.setRemarques(a.getRemarques());
+        dto.setNiveau(a.getNiveau());
+        dto.setArchive(a.getArchive());
+        if (a.getEntreprise() != null) dto.setEntrepriseId(a.getEntreprise().getId());
+        if (a.getMission() != null) dto.setMissionId(a.getMission().getId());
+        if (a.getTuteur() != null) dto.setTuteurId(a.getTuteur().getId());
+        if (a.getMemoire() != null) dto.setMemoireId(a.getMemoire().getId());
+        return dto;
+    }
+
+    private Apprenti toApprentiEntity(ApprentiFormDto dto) {
+        Apprenti a = new Apprenti();
+        a.setAnneeAcademique(dto.getAnneeAcademique());
+        a.setMajeure(dto.getMajeure());
+        a.setNom(dto.getNom());
+        a.setPrenom(dto.getPrenom());
+        a.setMail(dto.getMail());
+        a.setTelephone(dto.getTelephone());
+        a.setRemarques(dto.getRemarques());
+        a.setNiveau(dto.getNiveau());
+        a.setArchive(dto.getArchive() != null ? dto.getArchive() : false);
+        if (dto.getEntrepriseId() != null) {
+            entrepriseService.getEntrepriseById(dto.getEntrepriseId()).ifPresent(a::setEntreprise);
+        }
+        if (dto.getMissionId() != null) {
+            missionService.getMissionById(dto.getMissionId()).ifPresent(a::setMission);
+        }
+        if (dto.getTuteurId() != null) {
+            tuteurService.getTuteurById(dto.getTuteurId()).ifPresent(a::setTuteur);
+        }
+        if (dto.getMemoireId() != null) {
+            memoireService.getMemoireById(dto.getMemoireId()).ifPresent(a::setMemoire);
+        }
+        return a;
+    }
+
     @GetMapping
     public String showListApprentis(Model model) {
         List<Apprenti> listApprentis = apprentiService.getAllApprentiActifs();
@@ -42,7 +103,7 @@ public class ApprentiUiController {
     }
 
     @GetMapping("/{id}")
-    public String showDetailsApprenti(@PathVariable Integer id,  Model model) {
+    public String showDetailsApprenti(@PathVariable Integer id, Model model) {
         Optional<Apprenti> apprenti = apprentiService.getApprentiById(id);
         model.addAttribute(apprentiStr, apprenti.orElseThrow(() -> new IllegalStateException("Cet apprenti n'existe pas")));
         return "apprenti/detail";
@@ -50,16 +111,16 @@ public class ApprentiUiController {
 
     @GetMapping("/new")
     public String addNewApprenti(Model model) {
-        model.addAttribute(apprentiStr, new Apprenti());
+        model.addAttribute(apprentiStr, new ApprentiFormDto());
         model.addAttribute("id", null);
         model.addAttribute("formAction", "/apprentis/update");
         return "apprenti/form";
     }
 
     @PostMapping("/update")
-    public String createApprenti(@ModelAttribute Apprenti apprenti) {
-        apprentiService.addApprenti(apprenti);
-        return "redirect:/apprentis/"+apprenti.getId();
+    public String createApprenti(@ModelAttribute ApprentiFormDto dto) {
+        Apprenti saved = apprentiService.addApprenti(toApprentiEntity(dto));
+        return "redirect:/apprentis/" + saved.getId();
     }
 
     @PostMapping("{id}/delete")
@@ -69,11 +130,11 @@ public class ApprentiUiController {
     }
 
     @GetMapping("/{id}/edit")
-    public String editApprenti(@PathVariable Integer id,  Model model) {
+    public String editApprenti(@PathVariable Integer id, Model model) {
         Optional<Apprenti> apprenti = apprentiService.getApprentiById(id);
-        model.addAttribute(apprentiStr, apprenti.orElse(null));
-        model.addAttribute("id", apprenti.isPresent() ? id :  null);
-        model.addAttribute("formAction", apprenti.isPresent() ? "/apprentis/update/" + id :  "/apprentis/update");
+        model.addAttribute(apprentiStr, apprenti.map(ApprentiUiController::fromEntity).orElse(null));
+        model.addAttribute("id", apprenti.isPresent() ? id : null);
+        model.addAttribute("formAction", apprenti.isPresent() ? "/apprentis/update/" + id : "/apprentis/update");
 
         model.addAttribute("entreprises", entrepriseService.getAllEntreprise());
         model.addAttribute("tuteurs", tuteurService.getAllTuteur());
@@ -84,10 +145,9 @@ public class ApprentiUiController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateApprenti(@PathVariable Integer id, @ModelAttribute Apprenti apprenti, Model model) {
-        boolean success = apprentiService.updateApprenti(id, apprenti);
+    public String updateApprenti(@PathVariable Integer id, @ModelAttribute ApprentiFormDto dto, Model model) {
+        boolean success = apprentiService.updateApprenti(id, toApprentiEntity(dto));
         model.addAttribute("success", success ? "Modification réussie !" : "Échec de la modification.");
-
         return "redirect:/apprentis";
     }
 
@@ -112,7 +172,7 @@ public class ApprentiUiController {
             case "mission":
                 var missions = missionService.getMissionByMotsCles(valeur);
                 if (!missions.isEmpty()) {
-                    list = apprentiService.FilterApprentiByMission(missions.stream().map(Mission::getId).collect(Collectors.toList()));
+                    list = apprentiService.FilterApprentiByMission(missions.stream().map(Mission::getId).toList());
                 }
                 break;
             case "annee":
@@ -127,12 +187,7 @@ public class ApprentiUiController {
                 break;
         }
 
-//        if (list.isEmpty()) {
-//            return "apprenti/list";
-//        }
-
         model.addAttribute("listApprentis", list);
         return "apprenti/list";
     }
-
 }

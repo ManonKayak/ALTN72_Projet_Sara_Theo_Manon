@@ -26,7 +26,7 @@ public class EntrepriseService {
 
     public Optional<Entreprise> getEntrepriseById(final int id)
     {
-        return this.entrepriseRepository.findById(id); //.orElseThrow(() -> new IllegalStateException("Cet Entreprise n'existe pas"));
+        return this.entrepriseRepository.findById(id);
     }
 
     @Transactional
@@ -56,8 +56,7 @@ public class EntrepriseService {
 
     public Entreprise getEntrepriseByName(final String name)
     {
-        Entreprise entreprise = entrepriseRepository.findByRaisonSociale(name);
-        return entreprise;
+        return entrepriseRepository.findByRaisonSociale(name);
     }
 
 }

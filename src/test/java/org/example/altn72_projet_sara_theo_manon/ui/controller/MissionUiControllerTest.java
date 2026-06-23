@@ -73,7 +73,7 @@ class MissionUiControllerTest {
     @Test
     void create_redirectsToDetail() {
         when(missionService.addMission(any())).thenReturn(mission);
-        String view = controller.createMission(mission);
+        String view = controller.createMission(new MissionUiController.MissionFormDto());
         assertEquals("redirect:/missions/1", view);
     }
 
@@ -95,7 +95,7 @@ class MissionUiControllerTest {
     @Test
     void update_redirectsToDetail() {
         when(missionService.updateMission(eq(1), any())).thenReturn(mission);
-        String view = controller.updateMission(1, mission);
+        String view = controller.updateMission(1, new MissionUiController.MissionFormDto());
         assertEquals("redirect:/missions/1", view);
     }
 }

@@ -26,7 +26,7 @@ public class MemoireService {
 
     public Optional<Memoire> getMemoireById(final int id)
     {
-        return this.memoireRepository.findById(id); //.orElseThrow(() -> new IllegalStateException("Cet memoire n'existe pas"));
+        return this.memoireRepository.findById(id);
     }
 
     @Transactional

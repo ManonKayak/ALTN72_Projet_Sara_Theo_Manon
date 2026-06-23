@@ -26,7 +26,7 @@ public class TuteurService {
 
     public Optional<Tuteur> getTuteurById(final int id)
     {
-        return this.tuteurRepository.findById(id); //.orElseThrow(() -> new IllegalStateException("Cet tuteur n'existe pas"));
+        return this.tuteurRepository.findById(id);
     }
 
     @Transactional

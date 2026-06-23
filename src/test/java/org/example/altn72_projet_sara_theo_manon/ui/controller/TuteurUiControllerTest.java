@@ -75,7 +75,7 @@ class TuteurUiControllerTest {
     @Test
     void create_redirectsToDetail() {
         when(tuteurService.addTuteur(any())).thenReturn(tuteur);
-        String view = controller.createTuteur(tuteur);
+        String view = controller.createTuteur(new TuteurUiController.TuteurFormDto());
         assertEquals("redirect:/tuteurs/1", view);
     }
 
@@ -97,7 +97,7 @@ class TuteurUiControllerTest {
     @Test
     void update_redirectsToDetail() {
         when(tuteurService.updateTuteur(eq(1), any())).thenReturn(tuteur);
-        String view = controller.updateTuteur(1, tuteur);
+        String view = controller.updateTuteur(1, new TuteurUiController.TuteurFormDto());
         assertEquals("redirect:/tuteurs/1", view);
     }
 }

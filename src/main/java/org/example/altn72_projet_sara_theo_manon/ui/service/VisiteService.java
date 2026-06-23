@@ -26,7 +26,7 @@ public class VisiteService {
 
     public Optional<Visite> getVisiteById(final int id)
     {
-        return this.visiteRepository.findById(id); //.orElseThrow(() -> new IllegalStateException("Cet visite n'existe pas"));
+        return this.visiteRepository.findById(id);
     }
 
     @Transactional

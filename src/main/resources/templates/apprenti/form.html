@@ -46,40 +46,40 @@
 
                     <div class="col-md-4">
                         <label class="form-label" for="entreprise_id">Entreprise</label>
-                        <select id="entreprise_id" class="form-select" th:field="*{entreprise}">
+                        <select id="entreprise_id" class="form-select" th:field="*{entrepriseId}">
                             <option value="">-- Sélectionnez une entreprise --</option>
                             <option th:each="entreprise : ${entreprises}"
-                                    th:value="${entreprise}"
+                                    th:value="${entreprise.id}"
                                     th:text="${entreprise.raisonSociale}"></option>
                         </select>
                     </div>
 
                     <div class="col-md-4">
                         <label class="form-label" for="tuteur_id">Tuteur</label>
-                        <select id="tuteur_id" class="form-select" th:field="*{tuteur}">
+                        <select id="tuteur_id" class="form-select" th:field="*{tuteurId}">
                             <option value="">-- Sélectionnez un tuteur --</option>
                             <option th:each="tuteur : ${tuteurs}"
-                                    th:value="${tuteur}"
+                                    th:value="${tuteur.id}"
                                     th:text="${tuteur.email}"></option>
                         </select>
                     </div>
 
                     <div class="col-md-4">
                         <label class="form-label" for="memoire_id">Mémoire</label>
-                        <select id="memoire_id" class="form-select" th:field="*{memoire}">
+                        <select id="memoire_id" class="form-select" th:field="*{memoireId}">
                             <option value="">-- Sélectionnez un mémoire --</option>
                             <option th:each="memoire : ${memoires}"
-                                    th:value="${memoire}"
+                                    th:value="${memoire.id}"
                                     th:text="${memoire.sujet}"></option>
                         </select>
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label" for="mission_id">Mémoire</label>
-                        <select id="mission_id" class="form-select" th:field="*{mission}">
-                            <option value="">-- Sélectionnez un mémoire --</option>
+                        <label class="form-label" for="mission_id">Mission</label>
+                        <select id="mission_id" class="form-select" th:field="*{missionId}">
+                            <option value="">-- Sélectionnez une mission --</option>
                             <option th:each="mission : ${missions}"
-                                    th:value="${mission}"
+                                    th:value="${mission.id}"
                                     th:text="${mission.motsCles}"></option>
                         </select>
                     </div>

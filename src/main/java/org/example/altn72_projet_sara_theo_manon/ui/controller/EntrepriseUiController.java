@@ -1,5 +1,6 @@
 package org.example.altn72_projet_sara_theo_manon.ui.controller;
 
+import lombok.Data;
 import org.example.altn72_projet_sara_theo_manon.model.Entreprise;
 import org.example.altn72_projet_sara_theo_manon.ui.service.EntrepriseService;
 import org.springframework.stereotype.Controller;
@@ -14,11 +15,33 @@ import java.util.Optional;
 public class EntrepriseUiController {
 
     private final EntrepriseService entrepriseService;
-
     private final String entrepriseStr = "entreprise";
 
     public EntrepriseUiController(EntrepriseService entrepriseService) {
         this.entrepriseService = entrepriseService;
+    }
+
+    @Data
+    public static class EntrepriseFormDto {
+        private String raisonSociale;
+        private String adresse;
+        private String infos;
+    }
+
+    private static EntrepriseFormDto fromEntity(Entreprise e) {
+        EntrepriseFormDto dto = new EntrepriseFormDto();
+        dto.setRaisonSociale(e.getRaisonSociale());
+        dto.setAdresse(e.getAdresse());
+        dto.setInfos(e.getInfos());
+        return dto;
+    }
+
+    private static Entreprise toEntity(EntrepriseFormDto dto) {
+        Entreprise e = new Entreprise();
+        e.setRaisonSociale(dto.getRaisonSociale());
+        e.setAdresse(dto.getAdresse());
+        e.setInfos(dto.getInfos());
+        return e;
     }
 
     @GetMapping
@@ -29,7 +52,7 @@ public class EntrepriseUiController {
     }
 
     @GetMapping("/{id}")
-    public String showDetailsEntreprise(@PathVariable Integer id,  Model model) {
+    public String showDetailsEntreprise(@PathVariable Integer id, Model model) {
         Optional<Entreprise> entreprise = entrepriseService.getEntrepriseById(id);
         model.addAttribute(entrepriseStr, entreprise.orElseThrow(() -> new IllegalStateException("Cet entreprise n'existe pas")));
         return "entreprise/detail";
@@ -37,16 +60,16 @@ public class EntrepriseUiController {
 
     @GetMapping("/new")
     public String addNewEntreprise(Model model) {
-        model.addAttribute(entrepriseStr, new Entreprise());
+        model.addAttribute(entrepriseStr, new EntrepriseFormDto());
         model.addAttribute("id", null);
         model.addAttribute("formAction", "entreprises/update");
         return "entreprise/form";
     }
 
     @PostMapping("/update")
-    public String createEntreprise(@ModelAttribute Entreprise entreprise) {
-        entrepriseService.addEntreprise(entreprise);
-        return "redirect:/entreprises/"+entreprise.getId();
+    public String createEntreprise(@ModelAttribute EntrepriseFormDto dto) {
+        Entreprise saved = entrepriseService.addEntreprise(toEntity(dto));
+        return "redirect:/entreprises/" + saved.getId();
     }
 
     @PostMapping("{id}/delete")
@@ -56,18 +79,17 @@ public class EntrepriseUiController {
     }
 
     @GetMapping("/{id}/edit")
-    public String editEntreprise(@PathVariable Integer id,  Model model) {
+    public String editEntreprise(@PathVariable Integer id, Model model) {
         Optional<Entreprise> entreprise = entrepriseService.getEntrepriseById(id);
-        model.addAttribute(entrepriseStr, entreprise.orElse(null));
-        model.addAttribute("id", entreprise.isPresent() ? id :  null);
-        model.addAttribute("formAction", entreprise.isPresent() ? "entreprises/update/" + id :  "entreprises/update");
-
+        model.addAttribute(entrepriseStr, entreprise.map(EntrepriseUiController::fromEntity).orElse(null));
+        model.addAttribute("id", entreprise.isPresent() ? id : null);
+        model.addAttribute("formAction", entreprise.isPresent() ? "entreprises/update/" + id : "entreprises/update");
         return "entreprise/form";
     }
 
     @PostMapping("/update/{id}")
-    public String updateEntreprise(@PathVariable Integer id, @ModelAttribute  Entreprise entreprise) {
-        entrepriseService.updateEntreprise(id, entreprise);
-        return "redirect:/entreprises/"+id;
+    public String updateEntreprise(@PathVariable Integer id, @ModelAttribute EntrepriseFormDto dto) {
+        entrepriseService.updateEntreprise(id, toEntity(dto));
+        return "redirect:/entreprises/" + id;
     }
 }
